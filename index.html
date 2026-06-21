@@ -1,0 +1,599 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>辺境TRPG村って、こんなところ</title><style>/* ============================================================
+   辺境TRPG村 ── Design Kit (village.css)
+   このファイルが「見た目」の正本（single source of truth）。
+   build_preview.py がこれを読み込んで生成HTMLに埋め込む。
+   Claude Design継承キットの中核。詳細は README_継承キット.md。
+   ※色・余白・コンポーネントの仕様変更は必ずここを直す（HTML側に直書きしない）。
+   ============================================================ */
+
+/* ---- 1. デザイントークン（色・テーマ） -------------------- */
+:root{
+  /* 地と文字 */
+  --bg:#fbf7f0; --tx:#3b3a36; --card:#fff;
+  --cln:#ece3d4;            /* 罫線・枠 */
+  --bq:#f4efe5; --bqln:#d8c6a6;   /* 引用 */
+  /* 見出し */
+  --h2:#3b5d50; --h2l:#e8a06b; --h3:#6b6256;
+  --lk:#c2683f; --mut:#9a948a;
+  /* ロール色（Discord準拠） */
+  --rt:#2c7fb8;  /* 旅人 青 */
+  --rm:#1f9e8a;  /* 領民 緑 */
+  --rk:#c8741c;  /* 騎士 橙 */
+  --re:#9036b8;  /* 執政官 紫 */
+  --rbot:#5a9e6f;/* 亀Bot 亀緑 */
+  /* 法と秩序 */
+  --lh:#7a5c3a;
+  /* ヒーローのグラデ */
+  --hero1:#e8896b; --hero2:#7d9b8e;
+  /* タブ */
+  --tab-bg:#efe7d8; --tab-ink:#8a7f6c; --tab-on:#fff; --tab-on-bg:#c2683f;
+  /* 巻物（パーチメント） */
+  --scr-bg:#f7eed9; --scr-bg2:#efe1c4; --scr-ln:#cdb487; --scr-ink:#5a4a30;
+}
+[data-theme=dark]{
+  --bg:#1a1b1e; --tx:#dadce0; --card:#26282c;
+  --cln:#33353a;
+  --bq:#26282c; --bqln:#4a4d54;
+  --h2:#86c7b3; --h2l:#e8a06b; --h3:#aeb2b8;
+  --lk:#e8a87c; --mut:#82868d;
+  --rt:#5aa9e6; --rm:#3fcaa0; --rk:#f0a35e; --re:#c79ae8; --rbot:#7bc593;
+  --lh:#cbb086;
+  --hero1:#b8553a; --hero2:#3c5249;
+  --tab-bg:#2c2e33; --tab-ink:#9aa0a8; --tab-on:#fff; --tab-on-bg:#c2683f;
+  --scr-bg:#2b2823; --scr-bg2:#332e26; --scr-ln:#5c4f38; --scr-ink:#e3d3ad;
+}
+
+/* ---- 2. ベース ------------------------------------------- */
+*{box-sizing:border-box}
+body{font-family:'Yu Gothic','Hiragino Kaku Gothic ProN',sans-serif;line-height:1.85;color:var(--tx);margin:0;background:var(--bg);transition:background .3s,color .3s}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px 90px}
+p{margin:.7em 0}
+a{color:var(--lk)}
+mark{background:#ffe9a8;color:#3a3a3a;padding:0 4px;border-radius:3px}
+.muted{color:var(--mut);font-size:.82em}
+hr{border:none;border-top:1px solid var(--cln);margin:2.4em 0}
+ul,ol{padding-left:1.4em}li{margin:.3em 0}
+
+/* ---- 3. ヒーロー ----------------------------------------- */
+.hero{background:linear-gradient(135deg,var(--hero1),var(--hero2));background-size:180% 180%;color:#fff;text-align:center;padding:64px 20px 56px;position:relative;overflow:hidden;animation:heroFlow 18s ease-in-out infinite}
+@keyframes heroFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% -20%,rgba(255,255,255,.25),transparent 60%);pointer-events:none}
+.hero .peak{font-size:2.2em;animation:float 4s ease-in-out infinite;display:inline-block}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero h1{font-size:2.5em;margin:.1em 0;text-shadow:0 2px 12px rgba(0,0,0,.18);position:relative}
+.hero .sub{font-size:1.05em;opacity:.95;max-width:520px;margin:.3em auto 1.4em;position:relative}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:18px 0;position:relative}
+.chip{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:6px 14px;font-size:.85em;backdrop-filter:blur(4px)}
+.cta{display:inline-block;background:#fff;color:#c2683f;font-weight:bold;padding:12px 30px;border-radius:30px;text-decoration:none;margin-top:10px;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:.2s;position:relative}
+.cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+
+/* ---- 4. タブ（切替） ------------------------------------- */
+.tabs{position:sticky;top:0;z-index:20;display:flex;gap:6px;justify-content:center;background:var(--bg);padding:14px 12px 12px;margin:0 -20px 6px;border-bottom:1px solid var(--cln);transition:background .3s}
+.tab-btn{font:inherit;font-weight:bold;font-size:.98em;color:var(--tab-ink);background:var(--tab-bg);border:none;border-radius:24px;padding:10px 22px;cursor:pointer;transition:.2s;line-height:1}
+.tab-btn:hover{filter:brightness(.97);transform:translateY(-1px)}
+.tab-btn.active{color:var(--tab-on);background:var(--tab-on-bg);box-shadow:0 6px 16px rgba(194,104,63,.35)}
+.panel{display:none;animation:none}
+.panel.active{display:block}
+
+/* ---- 5. 見出し・本文 ------------------------------------- */
+.doc-title{font-size:1.7em;text-align:center;color:var(--h2);margin:1.4em 0 .2em;line-height:1.5}
+.doc-title.story{font-family:'Yu Mincho','Hiragino Mincho ProN',serif;letter-spacing:.02em}
+.doc-title:after{content:"";display:block;width:64px;height:3px;background:var(--h2l);border-radius:3px;margin:.55em auto 0}
+h2{font-size:1.45em;margin-top:2.2em;color:var(--h2);display:flex;align-items:center;gap:.4em}
+h2:before{content:"";width:8px;height:1.1em;background:var(--h2l);border-radius:4px;display:inline-block}
+h3{font-size:1.1em;color:var(--h3);margin-top:1.6em}
+blockquote{background:var(--bq);border-left:4px solid var(--bqln);margin:1.1em 0;padding:.7em 1.1em;border-radius:0 8px 8px 0}
+blockquote p{margin:.4em 0}
+
+/* ---- 6. 物語タブ専用の味つけ ----------------------------- */
+.panel-story{font-size:1.02em}
+.panel-story p{line-height:1.95}
+.panel-story .lead{text-align:center;color:var(--h3);font-style:italic}
+.scene-break{text-align:center;color:var(--h2l);letter-spacing:.7em;margin:2.4em 0 2.2em;font-size:.9em;user-select:none}
+.scene-break:before{content:"❖ ❖ ❖"}
+
+/* ---- 7. 開閉トグル / 巻物 -------------------------------- */
+details{background:var(--card);border:1px solid var(--cln);border-radius:12px;margin:1em 0;padding:0 1.1em;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+summary{cursor:pointer;font-weight:bold;padding:.9em 0;color:var(--h2);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary:before{content:"▶ ";color:var(--h2l);font-size:.8em}
+details[open] summary:before{content:"▼ "}
+summary:hover{color:var(--h2l)}
+.dbody{padding:.2em 0 1.1em;border-top:1px dashed var(--cln)}
+/* 巻物（法と秩序・AIスタンス）= パーチメント風 */
+details.scroll{background:linear-gradient(180deg,var(--scr-bg),var(--scr-bg2));border:1px solid var(--scr-ln);box-shadow:0 3px 14px rgba(120,90,40,.14),inset 0 0 0 4px rgba(255,255,255,.18)}
+details.scroll>summary{color:var(--scr-ink)}
+details.scroll>summary:before{content:"📜 ";font-size:1em}
+details.scroll[open]>summary:before{content:"📜 "}
+details.scroll>summary:hover{color:var(--lh)}
+details.scroll .dbody{border-top:1px dashed var(--scr-ln);color:var(--scr-ink)}
+details.scroll a{color:var(--lh)}
+
+/* ---- 8. ロール ------------------------------------------- */
+.role{font-weight:bold;padding:1px 5px;border-radius:5px}
+.role-tab{color:#fff;background:var(--rt)}
+.role-min{color:#fff;background:var(--rm)}
+.role-kni{color:#fff;background:var(--rk)}
+.role-exe{color:#fff;background:var(--re)}
+.role-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.rc{border-radius:10px;padding:12px 14px;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.rc b{font-size:1.05em}
+.rc span{font-size:.82em;opacity:.95;display:block;margin-top:3px}
+
+/* ---- 9. 動画・ステップ・法と秩序本文 --------------------- */
+.vid{position:relative;padding-bottom:56%;height:0;margin:1.2em 0;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.vid iframe{position:absolute;width:100%;height:100%}
+.steps{counter-reset:s;list-style:none;padding-left:0}
+.steps li{counter-increment:s;position:relative;padding:.5em 0 .5em 2.4em;border-bottom:1px dashed var(--cln)}
+.steps li:before{content:counter(s);position:absolute;left:0;top:.45em;width:1.7em;height:1.7em;background:var(--h2l);color:#fff;border-radius:50%;text-align:center;line-height:1.7em;font-weight:bold;font-size:.85em}
+.law-h{font-size:1.05em;color:var(--lh);margin:1.2em 0 .4em;border-bottom:1px solid var(--scr-ln)}
+.law-a{margin:.9em 0 .1em}
+.law-p{margin:.1em 0;padding-left:1em}
+.law-li{margin:.05em 0;padding-left:1.7em;font-size:.95em;opacity:.9}
+.law-li:before{content:"・";margin-left:-1.1em}
+.sp{height:.4em}
+
+/* ---- 10. 補助 -------------------------------------------- */
+.note{background:var(--bq);border:1px dashed var(--bqln);border-radius:10px;padding:.7em 1.1em;font-size:.84em;color:var(--h3);margin:16px 0 22px}
+.sig{text-align:right;color:var(--mut);margin-top:1.5em}
+.theme-btn{position:fixed;top:12px;right:12px;background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+
+/* ---- 11. スクロール出現アニメ ---------------------------- */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.reveal.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero,.hero .peak{animation:none}
+}
+</style></head><body>
+<button class="theme-btn" onclick="toggleTheme()">🌙 ダーク</button>
+
+<div class="hero">
+ <div class="peak">⛰️</div>
+ <h1>辺境TRPG村</h1>
+ <div class="sub">今夜もどこかでサイコロが転がり、誰かが叫び、誰かが泣いています。<br>（※ぜんぶ、良い意味で。）</div>
+ <div class="chips">
+  <span class="chip">👥 約200人</span>
+  <span class="chip">🎲 ほぼ毎日どこかで卓</span>
+  <span class="chip">⚔️ アリアン2E＋多システム</span>
+  <span class="chip">🏰 2022年から運営</span>
+ </div>
+ <a class="cta" href="#tabs">村をのぞいてみる →</a>
+</div>
+
+<div class="wrap">
+
+<div class="tabs" id="tabs" role="tablist">
+ <button class="tab-btn" data-tab="story" role="tab">🐢 物語で紹介</button>
+ <button class="tab-btn active" data-tab="plain" role="tab">📋 ふつうに紹介</button>
+</div>
+<div class="panel panel-story" id="tab-story" role="tabpanel" hidden><h1 class="doc-title story reveal">辺境TRPG村 ── 記憶喪失の亀と、ある長い一日</h1>
+<p class="reveal">——目が覚めた。</p>
+<p class="reveal">最悪の目覚めだ。記憶という荷物をどこかの酒場のカウンターに置き忘れてきたらしい。名前も過去も面影もねえ。</p>
+<p class="reveal">分かるのはひとつだけ。俺は何かを&quot;配って&quot;きた。何年も何度も。誰に何を——そいつはまだ霧の向こうだ。</p>
+<p class="reveal">視界がやけに低い。世界がずいぶん大きく見える。……まあいい。低いところから見上げる景色もそう悪かない。</p>
+<p class="reveal">軽い足音。場違いなくらい明るいそれがまっすぐ近づいてきた。</p>
+<p class="reveal">「——あっ、起きた！　おはよう、大丈夫？」</p>
+<p class="reveal">明るい娘だ。こっちの素性も知らないくせに旧い友達みたいに笑う。……警戒するのが野暮に思える。そんな街もあるらしい。</p>
+<p class="reveal">「ここね、『辺境TRPG村』っていうの。サイコロ振って、みんなで物語をつくる村。案内したげる、歩こ？」</p>
+<p class="reveal">何か気の利いた台詞でも返してやろうとした。だが口から出たのは——しわがれた「……」ひとつ。</p>
+<p class="reveal">妙な話だが娘は気にも留めなかった。まるで俺の返事をちゃんと聞き取ったみてえに笑って先に歩き出す。……どうせ行く当てもねえ。ついて行くさ。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">街は嘘をつかなかった。</p>
+<p class="reveal">あちこちで卓が立ってる。テキストで、声で。盤上で剣が交わり、酒場で笑いが弾ける。誰かが派手にダイスを外して全員で頭を抱えてやがった。</p>
+<p class="reveal">「ほぼ毎日どこかで卓が立つの。アリアンロッドが多いけど、CoCもダブルクロスもいろいろ。テキストでも声でもね。初めての人も多いんだよ。分かんなかったら誰かが必ず横につくし、見学だけでも歓迎」</p>
+<p class="reveal">気楽なもんだ。……ただ、胸の奥がちりっと痛む。なんでだろうな。</p>
+<p class="reveal">ふいに頭の奥で何かが光った。霧の村。途切れる子守唄。雪原を行く隊列。誰かのキャラが別の誰かにそっと手を差し出す瞬間——。知らねえ景色のはずが、なぜか懐かしい。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">「掟が気になる？　隠し事はないよ。ほら」</p>
+<p class="reveal">娘が古い巻物を差し出した。</p>
+<details class="reveal scroll"><summary>巻物をひらく：法と秩序（村のすべての掟）</summary><div class="dbody"><h4 class="law-h">■ コミュニティサーバーの秩序を維持する為に守るべき法</h4>
+<div class="sp"></div>
+<p class="law-a"><strong>第一項「トラブル対策1-騎士・執政官への相談」</strong></p>
+<p class="law-p">サーバー内でトラブルが発生した場合（またはトラブルの発生が予期される場合）、早期に管理メンバー( <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> )にDM等で相談を行なう事。相談を受けた管理メンバーは状況を調べ、第七項(違反者への措置)に基づき、公正な立場で仲裁・解決・措置(注意、警告、追放、謹慎等)を行なう事。</p>
+<p class="law-li">困ったらすぐに管理メンバーに相談しましょう。</p>
+<p class="law-li">管理メンバーは可能な限り親身に相談を聞くこと。泣き寝入りはさせない事。</p>
+<p class="law-li">トラブルを見かけた場合は、見て見ぬふりをせず管理メンバー(騎士・執政官)へ報告をお願いします。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第二項「トラブル対策2-過干渉の禁止」</strong></p>
+<p class="law-p">第七項(違反者への措置)以外のケースにおいて、他メンバーへの望まれぬ過干渉を避ける事。</p>
+<p class="law-li">出会い目的での執拗な接触や、セッションに不必要な情報を無理に聞き出す行為の禁止(ストーカー対策)。</p>
+<p class="law-li">やり方にもよりますが、望まれぬルール運用の指摘やキャラクターシートの構成への過度な口出しなどもこれに当たります。セッション進行の都合上必要な場合は言葉選びに気を付けながら上手にコミュニケーションを取ってください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第三項「トラブル対策3-暴力・暴言の禁止等」</strong></p>
+<p class="law-p">他サーバーメンバーを不快に思わせるような行為は厳に慎む事。</p>
+<p class="law-li">冗談ととりにくい一線を越えた暴言、思いやりのない発言や、犯罪教唆、反社会的勢力との繋がりを匂わせる発言等の禁止。</p>
+<p class="law-li">他者が時間と手間を費やし創作したものを無為なものとするような行為を慎む事。</p>
+<p class="law-li">事実の有無に関わらず、改善要求や措置以外の目的でサーバーメンバーを非難・晒し上げる行為を厳に慎む事。</p>
+<p class="law-li">たとえVCでログが残らないからといって何でも発言していいわけではありません。テキストでのやり取りと同様、相手の立場になって発言を行なうようにしましょう。不満等がある場合は&quot;不満を共有して広めるのではなく&quot;騎士や執政官に相談し、抱え込まないようにしましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第四項「トラブル対策4-サーバー外トラブルの規定」</strong></p>
+<p class="law-p">当サーバーは、メンバー同士が安心して交流できるコミュニティを維持するために参加時審査(第六項)を行なっている都合上、当サーバーへ参加後もサーバー外で発生したトラブルがサーバー内のメンバーやコミュニティに悪影響を及ぼすと判断された場合、サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )が都度対応を行う事。</p>
+<p class="law-li">このサーバー外での問題であっても、管理メンバーに話が持ち込まれればその対処をしなければなりません。そのような事にならないよう、サーバー内外問わずネットエチケットを遵守するよう心がけましょう。</p>
+<p class="law-li">トラブルの確認後は状況の精査や注意・指導を行い、悪質または継続的な問題がある場合には、必要に応じて適切な措置(注意、警告、追放、謹慎等)を行ないます。</p>
+<p class="law-li">参加時審査を通過した後も、当サーバー外での素行が悪いと判断した場合は措置(注意、警告、追放、謹慎等)を行なわざるを得ません。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第五項「トラブル対策5-秘密保持規定」</strong></p>
+<p class="law-p">当サーバーは4種のロール( <span class="role role-tab">@旅人</span> 、 <span class="role role-min">@領民</span> 、 <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> )によってメンバーが編成され、それぞれアクセス可能な情報に差異がある都合上、第八項の規定を除き、閲覧が制限された場所（例：領民議会、円卓会議）で共有された情報を外部に持ち出す事や、許可なく他のメンバーの個人情報を外部に共有する行為は禁止とする。</p>
+<p class="law-li">当サーバーでは、全メンバーが安心して交流・意見交換できる環境を守る為、プライバシーと情報保護を重視しています。</p>
+<p class="law-li">情報漏洩が確認された場合、管理メンバー(騎士・執政官)は状況に応じて注意・指導を行い、悪質なケースでは厳正な措置(注意、警告、追放、謹慎等)を講じることがあります。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第六項「トラブル対策6-自治行為の禁止」</strong></p>
+<p class="law-p">当サーバーには明確に管理メンバーとして <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> がおり、この管理メンバーらによってサーバー運営・管理を行なう。その為、 管理メンバー以外のメンバーによる当サーバー内における自治行為を禁ずる。他メンバーに対して注意等を行なう際は、やむを得ない状況を除き管理メンバーへと通報を行ない対応を任せる事。</p>
+<p class="law-li">法の違反者を発見した場合、自治行為を行なわずにまずは管理メンバーへとご連絡ください。状況に応じて相談の上、必要な対応を行なってまいります。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第七項「トラブル対策7-違反者への措置」</strong></p>
+<p class="law-p">『コミュニティサーバーの秩序を維持する為に守るべき法』、『セッションにおいて守るべき法』、『追加条項』のいずれかの項に <span class="role role-tab">@旅人</span> 、 <span class="role role-min">@領民</span> 、 <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> が反した場合、サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )の内過半数以上の合意に基づく協議により、問題を起こした当事者に対して注意・警告・ロール格下げ・追放、謹慎等の強制力のある措置を行なう。また、措置後に注意・警告や改善要求に応じる意思なしと判断した場合、措置の内容を追放等のより重いものへと移行する事。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第八項「トラブル対策8-情報開示規定」</strong></p>
+<p class="law-p">サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )は、 <span class="role role-tab">@旅人</span> 、 <span class="role role-min">@領民</span> からサーバー管理・運営、措置について等の問い合わせを受けた場合、プライバシーに配慮した上で可能な限りその経緯や事情等について情報の開示を行う事。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第九項「メンバーのロール・権限の格上げ方法」</strong></p>
+<p class="law-p">新規に当サーバーへとメンバーを迎え入れる場合、その経緯と、簡単なその人となり及び略歴を可能な限りサーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )は調査を行う事(参加時審査)。調査によって得られた情報の共有を済ませた後に、最終的に加入を認めるかどうかの判断を管理メンバーが3人以上または全管理者の内過半数以上の合意に基づく協議において行う事。加入が決定したメンバーに対し、サーバー管理メンバーは <span class="role role-tab">@旅人</span> ロールを付与する事。</p>
+<p class="law-p">同様にして <span class="role role-tab">@旅人</span> を <span class="role role-min">@領民</span> 、 <span class="role role-min">@領民</span> を <span class="role role-kni">@騎士</span> 、 <span class="role role-kni">@騎士</span> を <span class="role role-exe">@執政官</span> へと変更したい連絡があった場合も、上記と同様の方法により協議を行ない、対応を決定する事。</p>
+<p class="law-li">自己紹介後、加入を認められたメンバーは旅人ロールを与えられ、当サーバー内のセッションに参加する為に必要な全てのチャンネルの閲覧権限を得ます。</p>
+<p class="law-li">領民ロールを付与されたい旅人や、騎士ロールや執政官ロールを付与されたい領民は意見箱へとその旨ご連絡ください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十項「思想信条の自由」</strong></p>
+<p class="law-p">当サーバーにおいても日本国憲法に倣い、信教及び応援球団、政治思想の自由は、何人に対してもこれを保障する。ただし、信教及び応援球団、政治思想の自由があれど第二、第三項の規定に反しないよう努力する事。</p>
+<p class="law-p">ただし、当サーバーにおいてはメンバー同士の無用な争いを避けるためにも、実在する信教及び応援球団、政治思想についての話題は非推奨とする。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十一項「騎士の務め」</strong></p>
+<p class="law-p">当サーバー内で何等かの管理・運営を務める、或いは任された者は、サーバー副管理者( <span class="role role-kni">@騎士</span> )に任命される。騎士はその自らが管理・運営する物に対してはサーバー管理者( <span class="role role-exe">@執政官</span> )と同等の責任を負う事及び相応の権限を所持している事を自覚し行動する事。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十二項「法の改定」</strong></p>
+<p class="law-p">新規に『コミュニティサーバーの秩序を維持する為に守るべき法』、『セッションにおいて守るべき法』、『追加条項』に項を追加する、または削除、修正する必要に差し迫られた場合、サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )が3人以上またはそれら全メンバーの内過半数以上の合意に基づく協議において、その内容を相談及び考査し、対応を決定・発表・施行する事。</p>
+<div class="sp"></div>
+<div class="sp"></div>
+<h4 class="law-h">■ セッションにおいて守るべき法</h4>
+<div class="sp"></div>
+<p class="law-a"><strong>第一項「参加者全員がセッションを作り上げる」</strong></p>
+<p class="law-p">GMとPLは、全てのセッション参加者が楽しめる時間になるよう相互に協力しましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第二項「暴言の扱い」</strong></p>
+<p class="law-p">信頼関係のない中での一方的な暴言は慎みましょう。PCの裏側には人間(PL)がいます。口の悪いPCのRPをする際は、操るPLによるフォローが必要です。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第三項「無意味なサプライズは非推奨」</strong></p>
+<p class="law-p">GMやPLは演出上やむを得ない状況を除き、原則的に他の参加者を騙すような事はしない事。PCは騙されてもPLは真相を分かっていた方が大抵うまくセッションは進行します。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第四項「GMとPLは敵ではない」</strong></p>
+<p class="law-p">PLはGMを敵視しないようにしましょう。PLとGMはセッションを楽しいものにするという共通の目的を持った仲間です。GMもまた、PLをやりこめようなどという魂胆でセッションを行なってはいけません。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第五項「初心者の為に心がけること」</strong></p>
+<p class="law-p">分からないことは質問しましょう。初心者の方が相談しやすい雰囲気づくりにご協力ください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第六項「コンセンサス」</strong></p>
+<p class="law-p">シナリオの大筋とは関係なく、なんらかの特殊なRPや演出等を時間を取って行ないたい場合はセッション前、プリプレイの段階で他の参加者に相談しましょう。</p>
+<p class="law-p">また、セッションにおいて通常とは異なる特別な配慮が必要な場合は、事前にその旨を参加者に連絡しコンセンサスを取りましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第七項「適切な描写、演出」</strong></p>
+<p class="law-p">GMもPLも、セッション時間を単なる数字の足し算引き算にしない為に、RPや描写を適切に挟みましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第八項「無断の離席の禁止」</strong></p>
+<p class="law-p">やむを得ない状況を除き、GMもPLも無断で長時間の離席をしないようにしましょう。事情がある場合はまずもって連絡をお願いします。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第九項「ルールブックの尊重」</strong></p>
+<p class="law-p">ゴールデンルールという概念は大切です。ですがそれを踏まえても、セッション参加者全員の共通不変の認識としてのルールブックの記載を蔑ろにしないようにしましょう。コンセンサスなくルールを意図的に曲げてセッションを行なうことはGMPL双方の立場から非推奨です。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十項「時間の管理と事前の準備」</strong></p>
+<p class="law-p">GMはセッション時間を長引かせないように工夫してみましょう。具体的には、必要に応じてシナリオテキストを事前に用意しておく、PLにチャットパレットの用意を頼んでおく、などといった対策が有効です。GMはセッション時間をいたずらに伸ばさないように時間管理に気を付けましょう。</p>
+<p class="law-p">また、PLは他の参加者を無用に待たせない為にも、GMの要請がない場合を除いてチャットパレットの準備等を終えておき、戦闘などでご自身のPCの行動順が回って来た時に初めて何をするかを悩むのではなく、あらかじめ次に何をするか決めておけるようにしましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十一項「日頃の体調管理」</strong></p>
+<p class="law-p">セッションへの参加者は、約束されたセッション時間に遅れずに出席するようにしましょう。寝坊や体調不良による欠席、遅刻を防ぐ為にも、日頃の体調管理が必要です。心身ともに健康な状態でセッションに臨んでください。</p>
+<p class="law-p">やむを得ない事情でも可能な限り早く連絡することを心掛けましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十二項「失敗してしまった時」</strong></p>
+<p class="law-p">失敗や事故はどうしても起きてしまうものなので、誠意を持ってその後の対応をしましょう。うまくいかなかった後の対処で人間性が現れます。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十三項「見学者の扱い」</strong></p>
+<p class="law-p">セッションを見学する際はそのセッションのGMが指定した見学方法に従ってください。また、セッションを進行の妨げとなるような事や雰囲気を乱すような行為は禁止です。</p>
+<div class="sp"></div>
+<div class="sp"></div>
+<h4 class="law-h">■追加条項</h4>
+<div class="sp"></div>
+<p class="law-a"><strong>第一項「セッションの尊重」</strong></p>
+<p class="law-p">当サーバー内で行われているセッションは企画者(主にGM)・参加者(主にPL)・見学者・管理者(騎士、執政官)全ての立場で尊重してください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第二項「ネットエチケットの遵守」</strong></p>
+<p class="law-p">『守っていますか？ルールとマナー』（参考：警視庁様）</p>
+<p class="law-p">『ネットリテラシーの基本』（参考：千葉県警様）</p>
+<p class="law-p">辺境TRPG村もまたインターネット社会のひとつです。現実社会と同様にお互いに立場を尊重し、節度ある行動をとってください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第三項「PLガイド、GMガイドの確認」</strong></p>
+<p class="law-p">当サーバーで最初にセッション参加希望前にはPLガイド（ 📜plガイド ）、セッション募集する前にはGMガイド（ 📜gmガイド ）を必ず確認し、記載に従いしかるべき対応を実施してください。</p></div></details>
+<p class="reveal">「長いでしょ。でもね、根っこはひとつだけなの。『みんなで気持ちよく』。それだけ」</p>
+<p class="reveal">……長く続く村ほど約束は増える。それは人が増えた証拠だ。悪かねえ話さ。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">歩くうち、面白いことに気づいた。</p>
+<p class="reveal">同じアリアンロッドでも卓によって&quot;遊び方&quot;がまるで違う。ハクスラに明け暮れる卓。涙なくして見られねえ物語の卓。悪党になって暴れる卓。雪原を生き延びる卓。</p>
+<p class="reveal">「『レギュレーション』って呼んでるの。『こういう遊び方がしたい！』を住み分けてるんだ。気分で選べるんだよ」</p>
+<p class="reveal">……なるほどな。同じ村でてんでバラバラの夢を見てやがる。それでいて誰も、隣の夢を否定しねえ。</p>
+<p class="reveal">——ここで悪い癖が出た。</p>
+<p class="reveal">俺はしみじみ思った。</p>
+<p class="reveal">人はみんな違う夢を見ている。その違いひとつのために国は割れ、人は背を向け合ってきた。古来ついぞ解けなかった、古い古い宿題だ。</p>
+<p class="reveal">……それをこの村は当たり前みたいに、隣同士でやってのけている。</p>
+<p class="reveal">「亀さん、なんか遠い目してる」</p>
+<p class="reveal">……いや、なんでもねえ。胸の内でそう返したが口から出るのは「……」だけだ。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">やがて水場に出た。</p>
+<p class="reveal">娘が何か喋ってる。俺はふと、足元の水たまりを覗き込んだ。</p>
+<p class="reveal">——そこに映っていたのは。</p>
+<p class="reveal">緑。短い手足。背中に立派な甲羅。つぶらで間抜けな目がこっちを見返している。</p>
+<p class="reveal">…………は？</p>
+<p class="reveal">俺は、亀だった。</p>
+<p class="reveal">ずっと何者かのつもりでいた。その正体が、こんなに小さくてまるい背中だったとはな。</p>
+<p class="reveal">「ふふっ、自分が亀だって忘れてたんだ？　かわいいね、亀さん」</p>
+<p class="reveal">……かわいい、か。ハードボイルドも形無しだ。</p>
+<p class="reveal">——だが。その一言で、ずっと強張っていた何かがほんの少しだけほどけた気がした。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">「ね、亀さん。村にはもうひとつ、とても繊細な話があるの。生成AIのこと」</p>
+<p class="reveal">娘の声が、少しだけまっすぐになった。</p>
+<p class="reveal">「これはね、人によって気持ちがぜんぜん違う話。だから……私がここで軽くまとめたりはしないでおくね」</p>
+<p class="reveal">「村の考えは、ぜんぶこの巻物に正直に書いてあるの。そのまま読んでみて」</p>
+<details class="reveal scroll"><summary>巻物をひらく：生成AIについて、村のいま</summary><div class="dbody"><p class="reveal">正直な話からしますね。<strong>生成AIは、いま本当に燃えやすい話題です。</strong> だから、村が&quot;いまどうなっているか&quot;を、隠さずお見せしておきます。</p>
+<p class="reveal"><strong>まず、法律と国の整理から。</strong></p>
+<p class="reveal">日本の現行法は、AIの活用を頭ごなしに禁じてはいません。AIの学習のための著作物の利用は、一定の条件のもとで認められていて（著作権法 第30条の4）、生成物については「<strong>既存の作品に似ていて、かつそれを下敷きにしているか</strong>」で従来どおり侵害を判断する——という整理を、<strong>国（文化庁）も指針として示しています</strong>（2024年。法的拘束力のある決まりではなく、現行法の解釈の整理です。詳しくは下の📎）。</p>
+<p class="reveal">（※もちろん「AIだから何でも自由」というわけではありません。）</p>
+<p class="reveal"><strong>そのうえで、村のいま。</strong></p>
+<p class="reveal">村では、生成AIの利用を <strong>禁止していません。</strong> イラストの生成、GMのシナリオ準備の補助、いろいろな作業の支援に、実際に使われています（私自身も使っています）。</p>
+<p class="reveal"><strong>ただ、禁止していないからこそ、村に根づいている&quot;お作法&quot;があります。絵を描く人への敬意です。</strong></p>
+<p class="reveal">自らの手で描く方、絵師さんに依頼して、対価を払って作品を迎える方。その手間も、技術も、想いも、AIがどれだけ便利になろうと、決して軽んじてよいものではありません。「AIを使うこと」と「絵を大切にすること」は、対立しません。村では、<strong>そのどちらも、欠かさず尊重されています。</strong> どちらかを貶めて、もう片方を持ち上げる——そんな空気は、ここにはありません。</p>
+<p class="reveal">これは、村の根っこにある「コンセンサス（事前の擦り合わせ）」の文化と、同じ精神です。だから——<strong>創作者へのリスペクトを欠かさないこと／自作かAI生成かをタグで区別する透明性／卓で使うなら事前に合意すること</strong>。この3つが、自然と&quot;お作法&quot;になっています。</p>
+<blockquote class="reveal"><p>村は、誰かに特定の立場を強制したりはしません。<strong>節度ある批判や議論は、むしろ歓迎されています。</strong></p>
+<p>ただ「いまの村は、こんなふうにAIと付き合っているよ」を、正直にお見せしているだけなんです。もし生成AIの活用そのものに強い抵抗がおありなら、たぶんこの村は居心地が良くないと思います。<strong>良し悪しではなく、相性</strong>の話です。</p></blockquote>
+<details class="reveal scroll"><summary>法的・公的な位置づけ</summary><div class="dbody">
+<ul>
+<li><strong>学習段階</strong>：日本の著作権法 <strong>第30条の4</strong> は、情報解析（AIの学習など）のための著作物の利用を、一定の条件のもとで認める規定を置いています。<strong>これは無制限の許可ではありません。</strong>「著作権者の利益を不当に害する場合」など、対象外となるケースも定められています。</li>
+<li><strong>生成・利用段階</strong>：文化庁・文化審議会「<strong>AIと著作権に関する考え方について</strong>」（2024年）は、AIの生成物については<strong>従来の著作権法と同じ基準</strong>——「<strong>類似性</strong>」と「<strong>依拠性</strong>」——で侵害を判断するとしています。つまり「AIだから何でも合法」というわけではありません。なお、この『考え方』は法的拘束力のある規則ではなく、現行法の解釈を示す指針で、最終的な判断は個別の事案ごと（最終的には裁判所）で行われます。</li>
+<li><strong>村のいま</strong>：ですので村では、生成物が既存の著作物に<strong>類似・依拠して権利を侵害することのないよう配慮</strong>し、関係法令と文化庁の考え方を尊重する方針で運用しています（個別の適法性は、事案ごとの判断になります）。</li>
+<li><strong>見直し</strong>：この分野は、まだ議論が進んでいる最中です。村の運用も、最新の公的な見解に応じて見直されていきます。</li>
+</ul>
+<p><small class="muted">参考：<a href="https://laws.e-gov.go.jp/document?lawid=345AC0000000048" target="_blank">著作権法30条の4（e-Gov）</a>／<a href="https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html" target="_blank">文化庁「AIと著作権について」</a>／<a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank">同「考え方」(2024)</a></small></p>
+</div></details>
+<p class="reveal">それから——村では、誰もが安心して過ごせることを、何より大切にしています。立場の違いに基づく<strong>節度ある疑問や議論は、いつでも歓迎</strong>です。一方で、事実に基づかない<strong>誹謗中傷・嫌がらせ・個人攻撃</strong>には、運営が対応します（内容によっては、法的措置も含めて）。外部からの攻撃的な言説に一つひとつ反応するより、<strong>村の中で安心して遊べる環境を守ること</strong>を優先する——それが村のいまの構えです。これは議論を封じるためではなく、村の暮らしを守るためのもの。どうか、穏やかにお付き合いくださいね。</p></div></details>
+<p class="reveal">娘の横顔は、いつもより少しだけ大人びて見えた。</p>
+<p class="reveal">こういう話を笑ってごまかさずに、ちゃんと置いていく。——それが、この村のやり方らしい。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">巡るほど甲羅の光は強くなっていった。よみがえる景色は、どれも知らねえ誰かの——いや。</p>
+<p class="reveal">——なあ、お嬢ちゃん。俺は何を配ってた？</p>
+<p class="reveal">胸の内でそう問うた。口から出るのはやっぱり「……」ばかりだ。</p>
+<p class="reveal">だが娘は、その問いがちゃんと聞こえたみてえににっこり笑った。</p>
+<p class="reveal">「あのね。昔、村にはふたつの声があったの。『卓が立ったら呼んで！』って人と、『通知は静かにしといて』って人。——どっちも正しい。でも、ぶつかる」</p>
+<p class="reveal">「だから、あなたが作られたの。押したい人だけが自分のボタンを押す。押したくない人は押さなくていい。それだけで、ふたつの声が同じ村で笑っていられる」</p>
+<p class="reveal">「あなたはね、村の門で&quot;役目（ロール）&quot;を配るBot——新しい人が村に来たら、いちばん最初に出会う亀さんなんだよ」</p>
+<p class="reveal">俺は自分の甲羅を見た。ボタンが並んでる。1番に133。3番に59。……数えきれねえ「はい」がそこにあった。</p>
+<p class="reveal">「あなたね、サーバー史上いちばんリアクションをもらった個人なんだよ」</p>
+<p class="reveal">……俺が。いちばんの人気者か。</p>
+<p class="reveal">そう胸の内で呟いただけだ。なのに娘は「ふふっ、まあそう言ってもいいけど」と、しれっと返しやがる。</p>
+<p class="reveal">そこで、また悪い癖が出た。</p>
+<p class="reveal">……たった、ボタン一つ。</p>
+<p class="reveal">通知が欲しい人と、欲しくない人。たったそれだけの違いを、人はずいぶん長いこと持て余してきた。すれ違いの数だけ、その「違い」があった。</p>
+<p class="reveal">それをこの村は——亀一匹に解かせてしまった。</p>
+<p class="reveal">何百という「はい」。誰ひとり同じじゃない。好きなシステムも通知の好みも信じるものも、てんでバラバラだ。</p>
+<p class="reveal">だが、そのバラバラがボタン一つで同じ卓を囲んでいる。</p>
+<p class="reveal">これは——銀河の片隅で起きた、ささやかで途方もない奇跡だ。</p>
+<p class="reveal">「亀さん、スケールでかすぎ。ただの通知設定だよ？」</p>
+<p class="reveal">……お嬢ちゃんには、まだ見えないのかもしれねえ。この一押しの、本当の重さが。</p>
+<p class="reveal">胸の内でそっとそう思う。むろん声にはならねえ。出るのはやっぱり「……」だけだ。</p>
+<p class="reveal">娘はけらけら笑って、それからちょっとだけ優しい顔をした。</p>
+<p class="reveal">「あなたは、『違っても工夫すれば、一緒に遊べる』——その証拠なの。村の理念、そのものだよ」</p>
+<p class="reveal">……柄じゃない。だが、悪くない役回りだ。</p>
+<p class="reveal">ハードボイルドな亀の、その正体は——どうやら、ずいぶん優しい村のちっぽけな門番だったらしい。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">「……ねえ、亀さん」</p>
+<p class="reveal">娘がふと、いたずらっぽく笑った。</p>
+<p class="reveal">「気づいてた？　あなた、さっきからずーっと一言も喋ってないんだよ」</p>
+<p class="reveal">……。</p>
+<p class="reveal">「ふふっ。まあ、いっか。——だって、<strong>カメだもんね。喋らないよね</strong>」</p>
+<p class="reveal">違えねえ。</p>
+<p class="reveal">だが、言葉なんざ要らねえ。俺の言いたいことは、どうやらこの娘にはぜんぶ筒抜けらしい。</p>
+<div class="scene-break reveal"></div>
+<p class="reveal">「あっ」</p>
+<p class="reveal">娘が門の外へ目を向けた。</p>
+<p class="reveal">「……新しい旅人。迷ってるみたい」</p>
+<p class="reveal">俺はゆっくり、そっちを向いた。</p>
+<p class="reveal">——なあ、そこの旅人。あんたに、ひとつだけ。</p>
+<p class="reveal">過去なんて思い出さなくていい。名前も来し方も、あとでいい。</p>
+<p class="reveal">ここでは、これから作ればいいんだ。あんたの物語を、あんたの「はい」を。</p>
+<p class="reveal">それはいつか——この村の、ささやかな灯になる。</p>
+<p class="reveal">おいで。歓迎するよ。<strong>辺境TRPG村</strong>へ。</p>
+<blockquote class="reveal"><p>🔗 <strong><mark>〔参加リンク〕</mark></strong></p></blockquote>
+<p class="reveal">（——おっと。村に来たら、まず一言名乗ってくれ。それで村の扉が開く。そんで俺のボタンを押しゃあいい。それが、あんたの最初の「はい」だ。）</p>
+<p class="reveal">辺境TRPG村</p></div>
+<div class="panel active" id="tab-plain" role="tabpanel"><h1 class="doc-title reveal">辺境TRPG村へようこそ</h1>
+<p class="reveal">ごきげんよう。<strong>辺境TRPG村</strong>は、約200人が集まるTRPGコミュニティ（Discordサーバー）です。2022年から続く、中世の村をモチーフにした小さな集落で、毎日のようにどこかで卓が立っています。</p>
+<p class="reveal">このページは、<strong>入る前に「自分に合う場所か」を見極めてもらう</strong>ためのもの。中の様子・ルール・文化を、できるだけ正直にお見せします。</p>
+<hr>
+<h2 class="reveal">🏘 どんな場所？</h2>
+<p class="reveal">村が大切にしているのは、たったひとつ。</p>
+<blockquote class="reveal"><p><strong>参加する皆が、誰一人欠けることなく、楽しい時間を過ごせること。</strong></p></blockquote>
+<p class="reveal">そのためにGMもPLも協力し、困っている人がいれば手を差し伸べる。分からないことは遠慮なく聞ける——そんな空気が根づいています。</p>
+<ul class="reveal"><li><strong>初心者歓迎。</strong> ルールやキャラ作りでつまずいても、誰かが必ず一緒に考えます。本番前に作り方講座が開かれることも。</li><li><strong>新しい人を、先に立てる。</strong> 卓で役割を決めるとき、後から来た人の希望を優先する譲り合いが自然にあります。</li><li><strong>安全に配慮。</strong> 苦手な描写やつらいテーマは事前に確認し合い、合わないときはちゃんと配慮します。</li></ul>
+<p class="reveal">そして、この村にはひとつの<strong>理念</strong>があります——<strong>「思想や好みが違っても、工夫すれば、同じ卓を囲める」</strong>。通知が欲しい人と欲しくない人を、ボタン一つで共存させる仕組み（後述の亀Bot）も、AIへの姿勢も、住み分けレギュレーションも、すべてこの一本の芯から来ています。</p>
+<hr>
+<h2 class="reveal">🎲 どんな遊びができる？</h2>
+<ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・アリアンストラテジー・シノビガミ</strong> など複数システムに対応。</li><li><strong>テキストセッションも、ボイスセッションも</strong>。PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
+<hr>
+<h2 class="reveal">🗺 「レギュレーション」とは</h2>
+<p class="reveal">辺境TRPG村ならではの仕組みです。</p>
+<blockquote class="reveal"><p><strong>レギュレーション</strong> ＝ 同じシステムを「いろんなルール・目的」で遊ぶための、遊び方のパッケージ。</p></blockquote>
+<p class="reveal">ハクスラを楽しむ卓、シリアスな物語を紡ぐ卓、悪役視点で暴れる卓、雪原を切り拓くサバイバル卓……とコンセプトの違う小世界がいくつもあり、気分で選べます。詳しくは村人「てん」さん制作の解説動画もどうぞ👇</p>
+<p class="reveal">🎬 <strong>【辺境TRPG村】レギュレーションって何？</strong> </p>
+<div class="vid reveal"><iframe src="https://www.youtube.com/embed/mytAr50pWGc" frameborder="0" allowfullscreen></iframe></div>
+<hr>
+<h2 class="reveal">👥 ロール（村での身分）</h2>
+<div class="role-cards reveal">
+ <div class="rc" style="background:var(--rt)"><b>@旅人</b><span>PLとして村デビュー。まずはここから</span></div>
+ <div class="rc" style="background:var(--rm)"><b>@領民</b><span>卓を立てる側へ。GMの称号</span></div>
+ <div class="rc" style="background:var(--rk)"><b>@騎士</b><span>村の自警団（橙色）。副管理者</span></div>
+ <div class="rc" style="background:var(--re)"><b>@執政官</b><span>村長たち（紫）。困ったらこの人</span></div>
+ <div class="rc" style="background:var(--rbot)"><b>🐢 亀Bot</b><span>通知ロールを配る門番。押した人だけ通知</span></div>
+</div>
+
+<p class="reveal">ロールによって、見られるチャンネルが段階的に開きます。</p>
+<ul class="reveal"><li><strong><span class="role role-tab">@旅人</span></strong>（青）：自己紹介後に付く入村ロール。PLとして参加でき、多くのチャンネルが見えます。</li><li><strong><span class="role role-min">@領民</span></strong>（緑）：GMとして卓を立てる人のロール。卓・チャンネルの作成権を持ちます。</li><li><strong><span class="role role-kni">@騎士</span></strong>（橙）：副管理者。法と秩序に則って対応する権限を持ちます。</li><li><strong><span class="role role-exe">@執政官</span></strong>（紫）：管理者。</li><li><strong>🐢 亀Bot（リアクションロール）</strong>：遊びたいシステムの募集通知を受け取りたい人だけが、ボタンを押してロールを取得。<strong>「通知が欲しい人／欲しくない人」を同じ村で共存させる</strong>ための仕組みです。</li></ul>
+<hr>
+<h2 class="reveal">📜 村のルール</h2>
+<p class="reveal">安心して遊ぶための <strong>「法と秩序」</strong> があります。まず押さえてほしい精神は、この3つ。</p>
+<ol class="reveal steps"><li><strong>相手の立場になって、気持ちよく遊ぶ。</strong></li><li><strong>困ったら、自分で裁かず管理者へ。</strong>（措置は皆の合議で公正に）</li><li><strong>コンセンサスを大切に。</strong>（特別なRPや配慮が要ることは事前に擦り合わせる）</li></ol>
+<details class="reveal scroll"><summary>法と秩序 全文を読む</summary><div class="dbody"><h4 class="law-h">■ コミュニティサーバーの秩序を維持する為に守るべき法</h4>
+<div class="sp"></div>
+<p class="law-a"><strong>第一項「トラブル対策1-騎士・執政官への相談」</strong></p>
+<p class="law-p">サーバー内でトラブルが発生した場合（またはトラブルの発生が予期される場合）、早期に管理メンバー( <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> )にDM等で相談を行なう事。相談を受けた管理メンバーは状況を調べ、第七項(違反者への措置)に基づき、公正な立場で仲裁・解決・措置(注意、警告、追放、謹慎等)を行なう事。</p>
+<p class="law-li">困ったらすぐに管理メンバーに相談しましょう。</p>
+<p class="law-li">管理メンバーは可能な限り親身に相談を聞くこと。泣き寝入りはさせない事。</p>
+<p class="law-li">トラブルを見かけた場合は、見て見ぬふりをせず管理メンバー(騎士・執政官)へ報告をお願いします。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第二項「トラブル対策2-過干渉の禁止」</strong></p>
+<p class="law-p">第七項(違反者への措置)以外のケースにおいて、他メンバーへの望まれぬ過干渉を避ける事。</p>
+<p class="law-li">出会い目的での執拗な接触や、セッションに不必要な情報を無理に聞き出す行為の禁止(ストーカー対策)。</p>
+<p class="law-li">やり方にもよりますが、望まれぬルール運用の指摘やキャラクターシートの構成への過度な口出しなどもこれに当たります。セッション進行の都合上必要な場合は言葉選びに気を付けながら上手にコミュニケーションを取ってください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第三項「トラブル対策3-暴力・暴言の禁止等」</strong></p>
+<p class="law-p">他サーバーメンバーを不快に思わせるような行為は厳に慎む事。</p>
+<p class="law-li">冗談ととりにくい一線を越えた暴言、思いやりのない発言や、犯罪教唆、反社会的勢力との繋がりを匂わせる発言等の禁止。</p>
+<p class="law-li">他者が時間と手間を費やし創作したものを無為なものとするような行為を慎む事。</p>
+<p class="law-li">事実の有無に関わらず、改善要求や措置以外の目的でサーバーメンバーを非難・晒し上げる行為を厳に慎む事。</p>
+<p class="law-li">たとえVCでログが残らないからといって何でも発言していいわけではありません。テキストでのやり取りと同様、相手の立場になって発言を行なうようにしましょう。不満等がある場合は&quot;不満を共有して広めるのではなく&quot;騎士や執政官に相談し、抱え込まないようにしましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第四項「トラブル対策4-サーバー外トラブルの規定」</strong></p>
+<p class="law-p">当サーバーは、メンバー同士が安心して交流できるコミュニティを維持するために参加時審査(第六項)を行なっている都合上、当サーバーへ参加後もサーバー外で発生したトラブルがサーバー内のメンバーやコミュニティに悪影響を及ぼすと判断された場合、サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )が都度対応を行う事。</p>
+<p class="law-li">このサーバー外での問題であっても、管理メンバーに話が持ち込まれればその対処をしなければなりません。そのような事にならないよう、サーバー内外問わずネットエチケットを遵守するよう心がけましょう。</p>
+<p class="law-li">トラブルの確認後は状況の精査や注意・指導を行い、悪質または継続的な問題がある場合には、必要に応じて適切な措置(注意、警告、追放、謹慎等)を行ないます。</p>
+<p class="law-li">参加時審査を通過した後も、当サーバー外での素行が悪いと判断した場合は措置(注意、警告、追放、謹慎等)を行なわざるを得ません。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第五項「トラブル対策5-秘密保持規定」</strong></p>
+<p class="law-p">当サーバーは4種のロール( <span class="role role-tab">@旅人</span> 、 <span class="role role-min">@領民</span> 、 <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> )によってメンバーが編成され、それぞれアクセス可能な情報に差異がある都合上、第八項の規定を除き、閲覧が制限された場所（例：領民議会、円卓会議）で共有された情報を外部に持ち出す事や、許可なく他のメンバーの個人情報を外部に共有する行為は禁止とする。</p>
+<p class="law-li">当サーバーでは、全メンバーが安心して交流・意見交換できる環境を守る為、プライバシーと情報保護を重視しています。</p>
+<p class="law-li">情報漏洩が確認された場合、管理メンバー(騎士・執政官)は状況に応じて注意・指導を行い、悪質なケースでは厳正な措置(注意、警告、追放、謹慎等)を講じることがあります。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第六項「トラブル対策6-自治行為の禁止」</strong></p>
+<p class="law-p">当サーバーには明確に管理メンバーとして <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> がおり、この管理メンバーらによってサーバー運営・管理を行なう。その為、 管理メンバー以外のメンバーによる当サーバー内における自治行為を禁ずる。他メンバーに対して注意等を行なう際は、やむを得ない状況を除き管理メンバーへと通報を行ない対応を任せる事。</p>
+<p class="law-li">法の違反者を発見した場合、自治行為を行なわずにまずは管理メンバーへとご連絡ください。状況に応じて相談の上、必要な対応を行なってまいります。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第七項「トラブル対策7-違反者への措置」</strong></p>
+<p class="law-p">『コミュニティサーバーの秩序を維持する為に守るべき法』、『セッションにおいて守るべき法』、『追加条項』のいずれかの項に <span class="role role-tab">@旅人</span> 、 <span class="role role-min">@領民</span> 、 <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> が反した場合、サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )の内過半数以上の合意に基づく協議により、問題を起こした当事者に対して注意・警告・ロール格下げ・追放、謹慎等の強制力のある措置を行なう。また、措置後に注意・警告や改善要求に応じる意思なしと判断した場合、措置の内容を追放等のより重いものへと移行する事。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第八項「トラブル対策8-情報開示規定」</strong></p>
+<p class="law-p">サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )は、 <span class="role role-tab">@旅人</span> 、 <span class="role role-min">@領民</span> からサーバー管理・運営、措置について等の問い合わせを受けた場合、プライバシーに配慮した上で可能な限りその経緯や事情等について情報の開示を行う事。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第九項「メンバーのロール・権限の格上げ方法」</strong></p>
+<p class="law-p">新規に当サーバーへとメンバーを迎え入れる場合、その経緯と、簡単なその人となり及び略歴を可能な限りサーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )は調査を行う事(参加時審査)。調査によって得られた情報の共有を済ませた後に、最終的に加入を認めるかどうかの判断を管理メンバーが3人以上または全管理者の内過半数以上の合意に基づく協議において行う事。加入が決定したメンバーに対し、サーバー管理メンバーは <span class="role role-tab">@旅人</span> ロールを付与する事。</p>
+<p class="law-p">同様にして <span class="role role-tab">@旅人</span> を <span class="role role-min">@領民</span> 、 <span class="role role-min">@領民</span> を <span class="role role-kni">@騎士</span> 、 <span class="role role-kni">@騎士</span> を <span class="role role-exe">@執政官</span> へと変更したい連絡があった場合も、上記と同様の方法により協議を行ない、対応を決定する事。</p>
+<p class="law-li">自己紹介後、加入を認められたメンバーは旅人ロールを与えられ、当サーバー内のセッションに参加する為に必要な全てのチャンネルの閲覧権限を得ます。</p>
+<p class="law-li">領民ロールを付与されたい旅人や、騎士ロールや執政官ロールを付与されたい領民は意見箱へとその旨ご連絡ください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十項「思想信条の自由」</strong></p>
+<p class="law-p">当サーバーにおいても日本国憲法に倣い、信教及び応援球団、政治思想の自由は、何人に対してもこれを保障する。ただし、信教及び応援球団、政治思想の自由があれど第二、第三項の規定に反しないよう努力する事。</p>
+<p class="law-p">ただし、当サーバーにおいてはメンバー同士の無用な争いを避けるためにも、実在する信教及び応援球団、政治思想についての話題は非推奨とする。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十一項「騎士の務め」</strong></p>
+<p class="law-p">当サーバー内で何等かの管理・運営を務める、或いは任された者は、サーバー副管理者( <span class="role role-kni">@騎士</span> )に任命される。騎士はその自らが管理・運営する物に対してはサーバー管理者( <span class="role role-exe">@執政官</span> )と同等の責任を負う事及び相応の権限を所持している事を自覚し行動する事。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十二項「法の改定」</strong></p>
+<p class="law-p">新規に『コミュニティサーバーの秩序を維持する為に守るべき法』、『セッションにおいて守るべき法』、『追加条項』に項を追加する、または削除、修正する必要に差し迫られた場合、サーバー管理者( <span class="role role-exe">@執政官</span> )及び副管理者( <span class="role role-kni">@騎士</span> )が3人以上またはそれら全メンバーの内過半数以上の合意に基づく協議において、その内容を相談及び考査し、対応を決定・発表・施行する事。</p>
+<div class="sp"></div>
+<div class="sp"></div>
+<h4 class="law-h">■ セッションにおいて守るべき法</h4>
+<div class="sp"></div>
+<p class="law-a"><strong>第一項「参加者全員がセッションを作り上げる」</strong></p>
+<p class="law-p">GMとPLは、全てのセッション参加者が楽しめる時間になるよう相互に協力しましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第二項「暴言の扱い」</strong></p>
+<p class="law-p">信頼関係のない中での一方的な暴言は慎みましょう。PCの裏側には人間(PL)がいます。口の悪いPCのRPをする際は、操るPLによるフォローが必要です。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第三項「無意味なサプライズは非推奨」</strong></p>
+<p class="law-p">GMやPLは演出上やむを得ない状況を除き、原則的に他の参加者を騙すような事はしない事。PCは騙されてもPLは真相を分かっていた方が大抵うまくセッションは進行します。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第四項「GMとPLは敵ではない」</strong></p>
+<p class="law-p">PLはGMを敵視しないようにしましょう。PLとGMはセッションを楽しいものにするという共通の目的を持った仲間です。GMもまた、PLをやりこめようなどという魂胆でセッションを行なってはいけません。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第五項「初心者の為に心がけること」</strong></p>
+<p class="law-p">分からないことは質問しましょう。初心者の方が相談しやすい雰囲気づくりにご協力ください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第六項「コンセンサス」</strong></p>
+<p class="law-p">シナリオの大筋とは関係なく、なんらかの特殊なRPや演出等を時間を取って行ないたい場合はセッション前、プリプレイの段階で他の参加者に相談しましょう。</p>
+<p class="law-p">また、セッションにおいて通常とは異なる特別な配慮が必要な場合は、事前にその旨を参加者に連絡しコンセンサスを取りましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第七項「適切な描写、演出」</strong></p>
+<p class="law-p">GMもPLも、セッション時間を単なる数字の足し算引き算にしない為に、RPや描写を適切に挟みましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第八項「無断の離席の禁止」</strong></p>
+<p class="law-p">やむを得ない状況を除き、GMもPLも無断で長時間の離席をしないようにしましょう。事情がある場合はまずもって連絡をお願いします。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第九項「ルールブックの尊重」</strong></p>
+<p class="law-p">ゴールデンルールという概念は大切です。ですがそれを踏まえても、セッション参加者全員の共通不変の認識としてのルールブックの記載を蔑ろにしないようにしましょう。コンセンサスなくルールを意図的に曲げてセッションを行なうことはGMPL双方の立場から非推奨です。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十項「時間の管理と事前の準備」</strong></p>
+<p class="law-p">GMはセッション時間を長引かせないように工夫してみましょう。具体的には、必要に応じてシナリオテキストを事前に用意しておく、PLにチャットパレットの用意を頼んでおく、などといった対策が有効です。GMはセッション時間をいたずらに伸ばさないように時間管理に気を付けましょう。</p>
+<p class="law-p">また、PLは他の参加者を無用に待たせない為にも、GMの要請がない場合を除いてチャットパレットの準備等を終えておき、戦闘などでご自身のPCの行動順が回って来た時に初めて何をするかを悩むのではなく、あらかじめ次に何をするか決めておけるようにしましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十一項「日頃の体調管理」</strong></p>
+<p class="law-p">セッションへの参加者は、約束されたセッション時間に遅れずに出席するようにしましょう。寝坊や体調不良による欠席、遅刻を防ぐ為にも、日頃の体調管理が必要です。心身ともに健康な状態でセッションに臨んでください。</p>
+<p class="law-p">やむを得ない事情でも可能な限り早く連絡することを心掛けましょう。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十二項「失敗してしまった時」</strong></p>
+<p class="law-p">失敗や事故はどうしても起きてしまうものなので、誠意を持ってその後の対応をしましょう。うまくいかなかった後の対処で人間性が現れます。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第十三項「見学者の扱い」</strong></p>
+<p class="law-p">セッションを見学する際はそのセッションのGMが指定した見学方法に従ってください。また、セッションを進行の妨げとなるような事や雰囲気を乱すような行為は禁止です。</p>
+<div class="sp"></div>
+<div class="sp"></div>
+<h4 class="law-h">■追加条項</h4>
+<div class="sp"></div>
+<p class="law-a"><strong>第一項「セッションの尊重」</strong></p>
+<p class="law-p">当サーバー内で行われているセッションは企画者(主にGM)・参加者(主にPL)・見学者・管理者(騎士、執政官)全ての立場で尊重してください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第二項「ネットエチケットの遵守」</strong></p>
+<p class="law-p">『守っていますか？ルールとマナー』（参考：警視庁様）</p>
+<p class="law-p">『ネットリテラシーの基本』（参考：千葉県警様）</p>
+<p class="law-p">辺境TRPG村もまたインターネット社会のひとつです。現実社会と同様にお互いに立場を尊重し、節度ある行動をとってください。</p>
+<div class="sp"></div>
+<p class="law-a"><strong>第三項「PLガイド、GMガイドの確認」</strong></p>
+<p class="law-p">当サーバーで最初にセッション参加希望前にはPLガイド（ 📜plガイド ）、セッション募集する前にはGMガイド（ 📜gmガイド ）を必ず確認し、記載に従いしかるべき対応を実施してください。</p></div></details>
+<hr>
+<h2 class="reveal">🚪 参加してからの流れ</h2>
+<ol class="reveal steps"><li>参加 →「はじめに」と「法と秩序」を読む →「自己紹介」を書く</li><li>管理者が確認して、<strong>専用ロール（旅人）を付与</strong>。これで必要なチャンネルが開きます</li><li><strong>GMをやりたくなったら</strong>、領民ロールを申請</li></ol>
+<p class="reveal">承認制なのは、皆が安心して過ごせる村を守るため。（※荒らし対策で、参加直後の10分間は書き込みができません）</p>
+<hr>
+<h2 class="reveal">🤖 生成AIについて、村のスタンス</h2>
+<p class="reveal">辺境TRPG村は、生成AIの利用を <strong>禁止していません</strong>（イラスト生成・GMのシナリオ準備の補助などに活用されています）。そのうえで、<strong>絵を描く人への敬意</strong>を欠かさないことを大切にしています——「AIを使うこと」と「絵を大切にすること」は対立しません。村はそのどちらも尊重します。</p>
+<p class="reveal">これは、日本の現行法（著作権法 第30条の4 ほか）と、文化庁「AIと著作権に関する考え方について」（2024年）を踏まえた運用です。AIの学習は一定の条件のもとで認められ、生成物は従来どおり「<strong>類似性</strong>」と「<strong>依拠性</strong>」で侵害が判断される——という整理に沿っています（＝「AIだから何でも合法」ではありません）。この分野は議論が進行中のため、村の方針も最新の公的見解に応じて見直します。</p>
+<details class="reveal scroll"><summary>法的・公的な位置づけを読む</summary><div class="dbody"><ul>
+<li><strong>学習段階</strong>：日本の著作権法 <strong>第30条の4</strong> は、情報解析（AIの学習など）のための著作物の利用を、一定の条件のもとで認める規定を置いています。<strong>これは無制限の許可ではありません。</strong>「著作権者の利益を不当に害する場合」など、対象外となるケースも定められています。</li>
+<li><strong>生成・利用段階</strong>：文化庁・文化審議会「<strong>AIと著作権に関する考え方について</strong>」（2024年）は、AIの生成物については<strong>従来の著作権法と同じ基準</strong>——「<strong>類似性</strong>」と「<strong>依拠性</strong>」——で侵害を判断するとしています。つまり「AIだから何でも合法」というわけではありません。なお、この『考え方』は法的拘束力のある規則ではなく、現行法の解釈を示す指針で、最終的な判断は個別の事案ごと（最終的には裁判所）で行われます。</li>
+<li><strong>村のいま</strong>：ですので村では、生成物が既存の著作物に<strong>類似・依拠して権利を侵害することのないよう配慮</strong>し、関係法令と文化庁の考え方を尊重する方針で運用しています（個別の適法性は、事案ごとの判断になります）。</li>
+<li><strong>見直し</strong>：この分野は、まだ議論が進んでいる最中です。村の運用も、最新の公的な見解に応じて見直されていきます。</li>
+</ul>
+<p><small class="muted">参考：<a href="https://laws.e-gov.go.jp/document?lawid=345AC0000000048" target="_blank">著作権法30条の4（e-Gov）</a>／<a href="https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html" target="_blank">文化庁「AIと著作権について」</a>／<a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank">同「考え方」(2024)</a></small></p></div></details>
+<p class="reveal">節度ある批判・議論は歓迎しますが、事実に基づかない誹謗中傷・嫌がらせには、村として毅然と対応します。</p>
+<hr>
+<h2 class="reveal">✉️ 村に遊びに来るなら</h2>
+<p class="reveal">ここまで読んでくださって、ありがとうございました。「合いそうだ」と感じたなら、心から歓迎します。</p>
+<blockquote class="reveal"><p>🔗 <strong>参加リンク：</strong><mark>〔ここにDiscord招待リンク〕</mark></p></blockquote>
+<p class="reveal">楽しいTRPGライフを、辺境TRPG村で。</p></div>
+
+<p class="sig" id="join">辺境TRPG村 領民のひとり　カテナドルグ</p>
+</div>
+<script>
+(function(){
+ // テーマ
+ function applyT(t){var d=document.documentElement;if(t==="dark"){d.setAttribute("data-theme","dark")}else{d.removeAttribute("data-theme")}var b=document.querySelector(".theme-btn");if(b){b.textContent=t==="dark"?"☀️ ライト":"🌙 ダーク"}try{localStorage.setItem("th",t)}catch(e){}}
+ window.toggleTheme=function(){applyT(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark")};
+ var saved="light";try{saved=localStorage.getItem("th")||"light"}catch(e){}applyT(saved);
+ // 出現アニメ
+ function revealIn(root){(root||document).querySelectorAll(".reveal").forEach(function(el){el.classList.add("on")})}
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}})},{threshold:.10});
+ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
+ // タブ
+ function show(name){
+  document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.toggle("active",b.dataset.tab===name)});
+  document.querySelectorAll(".panel").forEach(function(p){var on=p.id==="tab-"+name;p.classList.toggle("active",on);p.hidden=!on;if(on){revealIn(p)}});
+  try{localStorage.setItem("tab",name)}catch(e){}
+ }
+ document.querySelectorAll(".tab-btn").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
+ var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}show(t);
+})();
+</script>
+</body></html>
