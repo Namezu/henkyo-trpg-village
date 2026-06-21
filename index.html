@@ -138,6 +138,8 @@ details.scroll a{color:var(--lh)}
 .note{background:var(--bq);border:1px dashed var(--bqln);border-radius:10px;padding:.7em 1.1em;font-size:.84em;color:var(--h3);margin:16px 0 22px}
 .sig{text-align:right;color:var(--mut);margin-top:1.5em}
 .theme-btn{position:fixed;top:12px;right:12px;background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+/* スマホ＝固定タブ（上部sticky）とテーマ切替ボタンが重なるので右下へ逃がす */
+@media(max-width:560px){.theme-btn{top:auto;bottom:14px;right:14px;box-shadow:0 3px 12px rgba(0,0,0,.25)}}
 
 /* ---- 11. スクロール出現アニメ ---------------------------- */
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
@@ -389,22 +391,22 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 <div class="panel panel-story" id="tab-story" role="tabpanel" hidden><h1 class="doc-title story reveal">辺境TRPG村 ── 記憶をなくした俺の、ある長い一日</h1>
 <figure class="ill ill-ph reveal"><div class="ill-frame">🎨 挿絵1（準備中）<span>「——あっ、起きた！　おはよう、大丈夫？」</span></div></figure>
 <p class="reveal">——目が覚めた。</p>
-<p class="reveal">最悪の目覚めだ。記憶という荷物をどこかの酒場のカウンターに置き忘れてきたらしい。名前も過去も面影もねえ。</p>
-<p class="reveal">分かるのはひとつだけ。俺は何かを&quot;配って&quot;きた。何年も何度も。誰に何を——そいつはまだ霧の向こうだ。</p>
-<p class="reveal">視界がやけに低い。世界がずいぶん大きく見える。……まあいい。低いところから見上げる景色もそう悪かない。</p>
-<p class="reveal">軽い足音。場違いなくらい明るいそれがまっすぐ近づいてきた。</p>
+<p class="reveal">最悪の目覚めだ。記憶という荷物を、どこかの酒場のカウンターに置き忘れてきたらしい。名前も過去も、面影さえ無い。</p>
+<p class="reveal">分かるのはひとつだけ。俺は何かを&quot;配って&quot;きた。何年も、何度も。誰に何を——それはまだ霧の向こうだ。</p>
+<p class="reveal">視界がやけに低い。世界がずいぶん大きく見える。……まあいい。低いところから見上げる景色も、そう悪くはない。</p>
+<p class="reveal">軽い足音。場違いなくらい明るいそれが、まっすぐ近づいてきた。</p>
 <p class="reveal">「——あっ、起きた！　おはよう、大丈夫？」</p>
-<p class="reveal">明るい娘だ。こっちの素性も知らないくせに旧い友達みたいに笑う。……警戒するのが野暮に思える。そんな村もあるらしい。</p>
+<p class="reveal">明るい娘だ。こちらの素性も知らないのに、旧い友のように笑う。……警戒するのが野暮に思える。そんな村も、あるらしい。</p>
 <p class="reveal">「ここね、『辺境TRPG村』っていうの。サイコロ振って、みんなで物語をつくる村。案内したげる、歩こ？」</p>
-<p class="reveal">——辺境TRPG村、か。辺境ねえ。……確かに、辺境らしい慎ましい響きだ。</p>
-<p class="reveal">何か気の利いた台詞でも返してやろうとした。だが、口から出たのは——「……」。いや、おかしい。声が、出ねえ。喉も舌も、うまく動かねえ。</p>
-<p class="reveal">妙な話だが娘は気にも留めなかった。まるで俺の返事をちゃんと聞き取ったみてえに笑って先に歩き出す。……どうせ行く当てもねえ。ついて行くさ。</p>
+<p class="reveal">——辺境TRPG村、か。……確かに、辺境らしい慎ましい響きだ。</p>
+<p class="reveal">何か気の利いた台詞でも返そうとした。だが、口から出たのは——「……」。いや、おかしい。声が、出ない。喉も舌も、うまく動かない。</p>
+<p class="reveal">妙な話だが、娘は気にも留めない。まるで俺の返事をちゃんと聞き取ったかのように笑って、先に歩き出す。……どうせ行く当ても無い。ついて行くとしよう。</p>
 <div class="scene-break reveal"></div>
 <p class="reveal">村は嘘をつかなかった。</p>
-<p class="reveal">あちこちで卓が立ってる。テキストで、声で。盤上で剣が交わり、酒場で笑いが弾ける。誰かが派手にダイスを外して全員で頭を抱えてやがった。</p>
+<p class="reveal">あちこちで卓が立っている。テキストで、声で。盤上で剣が交わり、酒場で笑いが弾ける。誰かが派手にダイスを外して、全員で頭を抱えていた。</p>
 <p class="reveal">「ほぼ毎日どこかで卓が立つの。アリアンロッドが多いけど、CoCもダブルクロスもいろいろ。テキストでも声でもね。初めての人も多いんだよ。分かんなかったら誰かが必ず横につくし、見学だけでも歓迎」</p>
-<p class="reveal">気楽なもんだ。……ただ、胸の奥がちりっと痛む。なんでだろうな。</p>
-<p class="reveal">ふいに頭の奥で何かが光った。霧の村。途切れる子守唄。雪原を行く隊列。誰かのキャラが別の誰かにそっと手を差し出す瞬間——。知らねえ景色のはずが、なぜか懐かしい。</p>
+<p class="reveal">気楽なものだ。……ただ、胸の奥がちりりと痛む。なぜだろうな。</p>
+<p class="reveal">ふいに頭の奥で、何かが光った。霧の村。途切れる子守唄。雪原を行く隊列。誰かのキャラが別の誰かに、そっと手を差し出す瞬間——。知らない景色のはずが、なぜか懐かしい。</p>
 <div class="scene-break reveal"></div>
 <figure class="ill ill-ph reveal"><div class="ill-frame">🎨 挿絵2（準備中）<span>「ほら」と、古い巻物を差し出す娘</span></div></figure>
 <p class="reveal">「掟が気になる？　隠し事はないよ。ほら」</p>
@@ -525,33 +527,33 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 <p class="law-a"><strong>第三項「PLガイド、GMガイドの確認」</strong></p>
 <p class="law-p">当サーバーで最初にセッション参加希望前にはPLガイド（ 📜plガイド ）、セッション募集する前にはGMガイド（ 📜gmガイド ）を必ず確認し、記載に従いしかるべき対応を実施してください。</p></div></details>
 <p class="reveal">「長いでしょ。でもね、根っこはひとつだけなの。『みんなで気持ちよく』。それだけ」</p>
-<p class="reveal">……長く続く村ほど約束は増える。それは人が増えた証拠だ。悪かねえ話さ。</p>
+<p class="reveal">……長く続く村ほど、約束は増える。それは人が増えた証拠だ。悪くない話だ。</p>
 <div class="scene-break reveal"></div>
 <p class="reveal">歩くうち、面白いことに気づいた。</p>
-<p class="reveal">同じアリアンロッドでも卓によって&quot;遊び方&quot;がまるで違う。ハクスラに明け暮れる卓。涙なくして見られねえ物語の卓。悪党になって暴れる卓。氷原を生き延びる卓。</p>
+<p class="reveal">同じアリアンロッドでも、卓によって&quot;遊び方&quot;がまるで違う。ハクスラに明け暮れる卓。涙なくして見られない物語の卓。悪党になって暴れる卓。氷原を生き延びる卓。</p>
 <p class="reveal">「『レギュレーション』って呼んでるの。『こういう遊び方がしたい！』を住み分けてるんだ。気分で選べるんだよ」</p>
 <p class="reveal">「気になるなら、村の子……『てん』が作った解説動画もあるんだ。ほら、これ」</p>
 <p class="reveal">🎬 <strong>【辺境TRPG村】レギュレーションって何？</strong> </p>
 <div class="vid reveal"><iframe src="https://www.youtube.com/embed/mytAr50pWGc" frameborder="0" allowfullscreen></iframe></div>
-<p class="reveal">……なるほどな。同じ村でてんでバラバラの夢を見てやがる。それでいて誰も、隣の夢を否定しねえ。</p>
-<p class="reveal">——ここで悪い癖が出た。</p>
+<p class="reveal">……なるほどな。同じ村で、てんでバラバラの夢を見ている。それでいて誰も、隣の夢を否定しない。</p>
+<p class="reveal">——ここで、悪い癖が出た。</p>
 <p class="reveal">俺はしみじみ思った。</p>
-<p class="reveal">人はみんな違う夢を見ている。その違いひとつのために国は割れ、人は背を向け合ってきた。古来ついぞ解けなかった、古い古い宿題だ。</p>
-<p class="reveal">……それをこの村は当たり前みたいに、隣同士でやってのけている。</p>
+<p class="reveal">人はみんな、違う夢を見ている。その違いひとつのために国は割れ、人は背を向け合ってきた。古来ついぞ解けなかった、古い古い宿題だ。</p>
+<p class="reveal">……それをこの村は当たり前のように、隣同士でやってのけている。</p>
 <p class="reveal">「亀さん、なんか遠い目してる」</p>
-<p class="reveal">……いや、なんでもねえ。胸の内でそう返したが口から出るのは「……」だけだ。</p>
+<p class="reveal">……いや、なんでもない。胸の内でそう返したが、口から出るのは「……」だけだ。</p>
 <div class="scene-break reveal"></div>
 <figure class="ill ill-ph reveal"><div class="ill-frame">🎨 挿絵3（準備中）<span>水辺のほとり。やわらかく笑う</span></div></figure>
 <p class="reveal">やがて水場に出た。</p>
-<p class="reveal">娘が何か喋ってる。俺はふと、足元の水たまりを覗き込んだ。</p>
+<p class="reveal">娘が何か喋っている。俺はふと、足元の水たまりを覗き込んだ。</p>
 <p class="reveal">——そこに映っていたのは。</p>
-<p class="reveal">緑。短い手足。背中に立派な甲羅。つぶらで間抜けな目がこっちを見返している。</p>
+<p class="reveal">緑。短い手足。背中に立派な甲羅。つぶらで間抜けな目が、こちらを見返している。</p>
 <p class="reveal">…………は？</p>
 <p class="reveal">俺は、亀だった。</p>
-<p class="reveal">ずっと何者かのつもりでいた。その正体が、こんなに小さくてまるい背中だったとはな。</p>
+<p class="reveal">ずっと何者かのつもりでいた。その正体が、こんなに小さくて、まるい背中だったとはな。</p>
 <p class="reveal">「ふふっ、自分が亀だって忘れてたんだ？　かわいいね、亀さん」</p>
 <p class="reveal">……かわいい、か。ハードボイルドも形無しだ。</p>
-<p class="reveal">——だが。その一言で、ずっと強張っていた何かがほんの少しだけほどけた気がした。</p>
+<p class="reveal">——だが。その一言で、ずっと強張っていた何かが、ほんの少しだけほどけた気がした。</p>
 <div class="scene-break reveal"></div>
 <figure class="ill ill-ph reveal"><div class="ill-frame">🎨 挿絵4（準備中）<span>少しだけ大人びて見えた、その横顔</span></div></figure>
 <p class="reveal">「ね、亀さん。村にはもうひとつ、とても繊細な話があるの。生成AIのこと」</p>
@@ -582,53 +584,54 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 <p class="reveal">娘の横顔は、いつもより少しだけ大人びて見えた。</p>
 <p class="reveal">こういう話を笑ってごまかさずに、ちゃんと置いていく。——それが、この村のやり方らしい。</p>
 <div class="scene-break reveal"></div>
-<p class="reveal">巡るほど甲羅の光は強くなっていった。よみがえる景色は、どれも知らねえ誰かの——いや。</p>
-<p class="reveal">——なあ、お嬢ちゃん。俺は何を配ってた？</p>
-<p class="reveal">胸の内でそう問うた。口から出るのはやっぱり「……」ばかりだ。</p>
-<p class="reveal">だが娘は、その問いがちゃんと聞こえたみてえににっこり笑った。</p>
+<p class="reveal">巡るほど、甲羅の光は強くなっていった。よみがえる景色は、どれも知らない誰かの——いや。</p>
+<p class="reveal">——なあ、お嬢さん。俺は、何を配っていた？</p>
+<p class="reveal">胸の内でそう問うた。口から出るのは、やはり「……」ばかりだ。</p>
+<p class="reveal">だが娘は、その問いがちゃんと聞こえたかのように、にっこり笑った。</p>
 <p class="reveal">「あのね。昔、村にはふたつの声があったの。『卓が立ったら呼んで！』って人と、『通知は静かにしといて』って人。——どっちも正しい。でも、ぶつかる」</p>
 <p class="reveal">「だから、あなたが作られたの。押したい人だけが自分のボタンを押す。押したくない人は押さなくていい。それだけで、ふたつの声が同じ村で笑っていられる」</p>
 <p class="reveal">「あなたはね、村の門で&quot;役目（ロール）&quot;を配るBot——新しい人が村に来たら、いちばん最初に出会う亀さんなんだよ」</p>
-<p class="reveal">俺は自分の甲羅を見た。ボタンが並んでる。1番に133。3番に59。……数えきれねえ「はい」がそこにあった。</p>
+<p class="reveal">俺は自分の甲羅を見た。ボタンが並んでいる。1番に133。3番に59。……数えきれない「はい」が、そこにあった。</p>
 <p class="reveal">「あなたね、サーバー史上いちばんリアクションをもらった個人なんだよ」</p>
 <p class="reveal">……俺が。いちばんの人気者か。</p>
-<p class="reveal">そう胸の内で呟いただけだ。なのに娘は「ふふっ、まあそう言ってもいいけど」と、しれっと返しやがる。</p>
+<p class="reveal">そう胸の内で呟いただけだ。なのに娘は「ふふっ、まあそう言ってもいいけど」と、しれっと返してくる。</p>
 <p class="reveal">そこで、また悪い癖が出た。</p>
 <p class="reveal">……たった、ボタン一つ。</p>
 <p class="reveal">通知が欲しい人と、欲しくない人。たったそれだけの違いを、人はずいぶん長いこと持て余してきた。すれ違いの数だけ、その「違い」があった。</p>
-<p class="reveal">それをこの村は——亀一匹に解かせてしまった。</p>
-<p class="reveal">何百という「はい」。誰ひとり同じじゃない。好きなシステムも通知の好みも信じるものも、てんでバラバラだ。</p>
-<p class="reveal">だが、そのバラバラがボタン一つで同じ卓を囲んでいる。</p>
+<p class="reveal">それをこの村は——亀一匹に、解かせてしまった。</p>
+<p class="reveal">何百という「はい」。誰ひとり同じではない。好きなシステムも、通知の好みも、信じるものも、てんでバラバラだ。</p>
+<p class="reveal">だが、そのバラバラが、ボタン一つで同じ卓を囲んでいる。</p>
 <p class="reveal">これは——銀河の片隅で起きた、ささやかで途方もない奇跡だ。</p>
 <p class="reveal">「亀さん、スケールでかすぎ。ただの通知設定だよ？」</p>
-<p class="reveal">……お嬢ちゃんには、まだ見えないのかもしれねえ。この一押しの、本当の重さが。</p>
-<p class="reveal">胸の内でそっとそう思う。むろん声にはならねえ。出るのはやっぱり「……」だけだ。</p>
+<p class="reveal">……お嬢さんには、まだ見えないのかもしれないな。この一押しの、本当の重さが。</p>
+<p class="reveal">胸の内でそっと、そう思う。むろん声にはならない。出るのは、やはり「……」だけだ。</p>
 <p class="reveal">娘はけらけら笑って、それからちょっとだけ優しい顔をした。</p>
 <p class="reveal">「あなたは、『違っても工夫すれば、一緒に遊べる』——その証拠なの。村の理念、そのものだよ」</p>
 <p class="reveal">……柄じゃない。だが、悪くない役回りだ。</p>
-<p class="reveal">ハードボイルドな亀の、その正体は——どうやら、ずいぶん優しい村のちっぽけな門番だったらしい。</p>
+<p class="reveal">ハードボイルドな亀の、その正体は——どうやら、ずいぶん優しい村の、ちっぽけな門番だったらしい。</p>
 <div class="scene-break reveal"></div>
 <p class="reveal">「……ねえ、亀さん」</p>
 <p class="reveal">娘がふと、いたずらっぽく笑った。</p>
 <p class="reveal">「気づいてた？　あなた、さっきからずーっと一言も喋ってないんだよ」</p>
 <p class="reveal">……。</p>
 <p class="reveal">「ふふっ。まあ、いっか。——だって、<strong>カメだもんね。喋らないよね</strong>」</p>
-<p class="reveal">違えねえ。</p>
-<p class="reveal">だが、言葉なんざ要らねえ。俺の言いたいことは、どうやらこの娘にはぜんぶ筒抜けらしい。</p>
+<p class="reveal">違いない。</p>
+<p class="reveal">だが、言葉など要らない。俺の言いたいことは、どうやらこの娘には、ぜんぶ筒抜けらしい。</p>
 <div class="scene-break reveal"></div>
 <figure class="ill ill-ph reveal"><div class="ill-frame">🎨 挿絵5（準備中）<span>「……新しい旅人。迷ってるみたい」</span></div></figure>
 <p class="reveal">「あっ」</p>
 <p class="reveal">娘が門の外へ目を向けた。</p>
 <p class="reveal">「……新しい旅人。迷ってるみたい」</p>
-<p class="reveal">俺はゆっくり、そっちを向いた。</p>
+<p class="reveal">俺はゆっくり、そちらを向いた。</p>
 <p class="reveal">——なあ、そこの旅人。あんたに、ひとつだけ。</p>
-<p class="reveal">過去なんて思い出さなくていい。名前も来し方も、あとでいい。</p>
+<p class="reveal">過去なんて、思い出さなくていい。名前も来し方も、あとでいい。</p>
 <p class="reveal">ここでは、これから作ればいいんだ。あんたの物語を、あんたの「はい」を。</p>
 <p class="reveal">それはいつか——この村の、ささやかな灯になる。</p>
 <p class="reveal">おいで。歓迎するよ。<strong>辺境TRPG村</strong>へ。</p>
 <blockquote class="reveal"><p>🔗 <strong><mark>〔参加リンク〕</mark></strong></p></blockquote>
-<p class="reveal">（——おっと。村に来たら、まず一言名乗ってくれ。それで村の扉が開く。そんで俺のボタンを押しゃあいい。それが、あんたの最初の「はい」だ。）</p>
-<p class="reveal">（追伸。ウミガメを、そして美しい海を守ろう——とか言いたいところだが、俺は海亀じゃねえし、ここに海なんざ無えんだが。柄にもなく、そう言いたくなる夜もあるのさ。）</p>
+<p class="reveal">（——おっと。村に来たら、まず一言、名乗ってくれ。それで村の扉が開く。あとは俺のボタンを押せばいい。それが、あんたの最初の「はい」だ。）</p>
+<div class="scene-break reveal"></div>
+<blockquote class="reveal"><p><strong>（書き手から、ひとこと）</strong>　亀の語りは、ここまで。最後に私事をひとつだけ——ウミガメを、そして美しい海を、守りたいんです。亀の物語を書いていたら、なんだか本気でそう思えてきて。……それはそれとして。よい村ですよ。ぜひ、のぞいてみてください。</p></blockquote>
 <p class="reveal">辺境TRPG村</p></div>
 
 <p class="sig" id="join">辺境TRPG村 領民のひとり　カテナドルグ</p>
