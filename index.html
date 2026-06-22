@@ -315,8 +315,8 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 @media (prefers-reduced-motion:reduce){.fog span{animation:none}}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
-.illbg{position:fixed;inset:-8% -2%;z-index:-1;background-size:cover;background-position:center;
-  filter:blur(10px);opacity:.20;transform:translateY(calc(var(--sy,0)*0.08px)) scale(1.10);will-change:transform}
+.illbg{position:fixed;inset:-14% -5%;z-index:-1;background-size:cover;background-position:center;
+  filter:blur(10px);opacity:.20;transform:translateY(calc(var(--sp,0)*-8vh)) scale(1.12);will-change:transform}
 [data-theme=dark] .illbg{opacity:.34}
 
 /* 28. 操作ボタン（テーマ＋BGM）を右上にまとめる */
@@ -684,7 +684,8 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="law-p">当サーバーで最初にセッション参加希望前にはPLガイド（ plガイド ）、セッション募集する前にはGMガイド（ gmガイド ）を必ず確認し、記載に従いしかるべき対応を実施してください。</p></div></details>
 <p class="reveal say">「長いでしょ。でもね、根っこはひとつだけなの。『みんなでトラブルなく楽しく』。それだけ」</p>
 <p class="reveal">……長く続く村ほど約束ごとは増えてゆく。それだけ人が根を張った証だ。なに、悪い話ではない。</p>
-<p class="reveal say">「あ、それとね。この村でいちばん大事な&quot;お約束&quot;が、ひとつだけあるんだ」</p>
+<p class="reveal say">「あ、それとね。この村でいちばん大事にしてる約束——『コンセンサス』っていうの」</p>
+<p class="reveal">聞き慣れぬ響きだ。だが、その言葉を口にした娘の横顔は、妙に真剣だった。……コンセンサス、とは何のことやら。</p>
 
 <div class="cutin reveal">
  <h4>ところで……『コンセンサス』ってなに！？</h4>
@@ -820,7 +821,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
  // スクロール連動の背景（--sy）＋進捗バー
  var bd=document.body, pbar=document.querySelector(".progress i");
- function onScroll(){var st=window.scrollY||window.pageYOffset||0;bd.style.setProperty("--sy",st);if(pbar){var h=document.documentElement.scrollHeight-window.innerHeight;pbar.style.width=(h>0?(st/h*100).toFixed(2):0)+"%"}}
+ function onScroll(){var st=window.scrollY||window.pageYOffset||0;var h=document.documentElement.scrollHeight-window.innerHeight;var r=h>0?st/h:0;bd.style.setProperty("--sy",st);bd.style.setProperty("--sp",r.toFixed(4));if(pbar){pbar.style.width=(r*100).toFixed(2)+"%"}}
  window.addEventListener("scroll",onScroll,{passive:true}); window.addEventListener("resize",onScroll,{passive:true}); onScroll();
  // ヒーローの光の粒
  var mt=document.querySelector(".hero .motes");
