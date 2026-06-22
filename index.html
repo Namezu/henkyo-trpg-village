@@ -333,16 +333,17 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 @media (prefers-reduced-motion:reduce){.fog span{animation:none}}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
-.illbg{position:fixed;inset:-10% -8%;z-index:-1;background-size:cover;background-position:center;
-  filter:blur(6px);opacity:.26;transform:translateX(calc(var(--sp,0)*-50vw)) scale(1.85);will-change:transform}
-[data-theme=dark] .illbg{opacity:.34}
+.illbg{position:fixed;inset:-10% -8%;z-index:-1;background-repeat:no-repeat;background-size:240% auto;
+  background-position:calc(var(--sp,0)*100%) center;
+  filter:blur(2px);opacity:.30;will-change:background-position}
+[data-theme=dark] .illbg{opacity:.20}
 
 /* 28. 操作ボタン（テーマ＋BGM）を右上にまとめる */
 .controls{position:fixed;top:12px;right:12px;z-index:99;display:flex;gap:8px;align-items:center}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
 @media(max-width:560px){.controls{top:auto;bottom:14px;right:14px}}
 
-@media (prefers-reduced-motion:reduce){.illbg{transform:none}}
+@media (prefers-reduced-motion:reduce){.illbg{background-position:50% center}}
 
 /* 29. 物語：少女のセリフ(.say)を地の文(亀)と視覚的に区別 */
 /*   亀＝明朝の地の文／少女＝丸ゴシック＋緑の縦線＋淡い色地で"明るい声"を演出 */
@@ -353,7 +354,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 
 /* 30. BGM音量つまみ */
 .bgm-vol{width:74px;vertical-align:middle;accent-color:var(--lk);cursor:pointer}
-.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}.illbg{background-image:url(img/hero_bg.jpg)}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}[data-theme=dark] .illbg{background-image:url(img/hero_bg_night.jpg)}</style></head><body>
+.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}.illbg{background-image:url(img/scroll_pano.jpg)}</style></head><body>
 <div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div>
 <div class="illbg"></div>
 <div class="fog"><span></span><span></span><span></span></div>
