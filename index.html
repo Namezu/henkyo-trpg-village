@@ -86,6 +86,24 @@ h3{font-size:1.1em;color:var(--h3);margin-top:1.6em}
 blockquote{background:var(--bq);border-left:4px solid var(--bqln);margin:1.1em 0;padding:.7em 1.1em;border-radius:0 8px 8px 0}
 blockquote p{margin:.4em 0}
 
+/* ---- 5b. 参加CTA（招待リンクを「押せるボタン」に格上げ・両タブ共通） ---- */
+.join-cta{margin:1.8em 0 .6em;text-align:center}
+.join-btn{display:inline-flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;
+  color:#fff;background:linear-gradient(180deg,#d2693f,#a8542f);border-radius:18px;
+  padding:17px 32px;min-width:min(440px,88%);box-sizing:border-box;
+  border:1px solid rgba(255,255,255,.22);box-shadow:0 7px 22px rgba(150,64,36,.40);
+  transition:transform .15s ease,box-shadow .15s ease;animation:joinpulse 2.6s ease-in-out infinite}
+.join-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(150,64,36,.52);animation:none}
+.join-btn:active{transform:translateY(0)}
+.join-main{font-size:1.22em;font-weight:700;letter-spacing:.02em;line-height:1.3}
+.join-main:after{content:"  →";font-weight:700}
+.join-url{font-size:.82em;font-weight:600;background:rgba(0,0,0,.20);padding:3px 13px;border-radius:11px;letter-spacing:.03em}
+.join-hint{margin:.55em 0 0;font-size:.86em;color:var(--mut)}
+.join-hint:before{content:"↑ "}
+@keyframes joinpulse{0%,100%{box-shadow:0 7px 22px rgba(150,64,36,.40)}50%{box-shadow:0 7px 26px rgba(210,105,63,.62)}}
+@media(max-width:560px){.join-btn{min-width:0;width:100%;padding:15px 18px}.join-main{font-size:1.12em}}
+@media(prefers-reduced-motion:reduce){.join-btn{animation:none}}
+
 /* ---- 6. 物語タブ専用の味つけ ----------------------------- */
 .panel-story{font-size:1.02em}
 .panel-story p{line-height:1.95}
@@ -542,7 +560,14 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <hr>
 <h2 class="reveal">村に遊びに来るなら</h2>
 <p class="reveal">ここまで読んでくださってありがとうございました。「合いそうだ」と感じたなら、心から歓迎します。</p>
-<blockquote class="reveal"><p><strong>参加リンク：</strong><a href="https://discord.gg/nHEf2w3DRm" target="_blank">辺境TRPG村へ（Discord）</a></p></blockquote>
+
+<div class="join-cta reveal">
+ <a class="join-btn" href="https://discord.gg/nHEf2w3DRm" target="_blank" rel="noopener">
+  <span class="join-main">辺境TRPG村に参加する</span>
+  <span class="join-url">discord.gg/nHEf2w3DRm</span>
+ </a>
+ <p class="join-hint">クリックすると Discord の招待ページが開きます</p>
+</div>
 <p class="reveal">楽しいTRPGライフを、辺境TRPG村で。</p></div>
 <div class="panel panel-story" id="tab-story" role="tabpanel" hidden><h1 class="doc-title story reveal">辺境TRPG村 ── 記憶をなくした俺の、ある長い一日</h1>
 <figure class="ill reveal"><img alt="「——あっ、起きた！　おはよう、大丈夫？」" loading="lazy" src="img/01.jpg"><figcaption>「——あっ、起きた！　おはよう、大丈夫？」</figcaption></figure>
@@ -712,6 +737,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal">娘が何か喋っている。俺はふと足元の水たまりを覗き込んだ。</p>
 <p class="reveal">——そこに映っていたのは。</p>
 <p class="reveal">緑。短い手足。背に負った立派な甲羅。つぶらで間の抜けた目がこちらを見返している。</p>
+<figure class="ill reveal"><img alt="水たまりに映った亀の顔" loading="lazy" src="img/reflect.jpg"><figcaption>——そこに映っていたのは。</figcaption></figure>
 <p class="reveal">……なんということだ。</p>
 <p class="reveal">俺は、亀だった。</p>
 <p class="reveal">永らく何者かであるつもりでいた。その正体がこれほど小さくまるい背中だったとは——とんだ茶番だ。</p>
@@ -784,7 +810,6 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <div class="scene-break reveal"></div>
 <p class="reveal say">「……ねえ、亀さん」</p>
 <p class="reveal">娘がふと、いたずらっぽく笑った。</p>
-<p class="reveal say">「気づいてた？　あなた、さっきからずーっと一言も喋ってないんだよ」</p>
 <p class="reveal">……。</p>
 <p class="reveal say">「ふふっ。まあ、いっか。——だって、<strong>カメだもんね。喋らないよね</strong>」</p>
 <p class="reveal">違いない。</p>
@@ -801,7 +826,14 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal">それはいつか——この村の、ささやかな灯火になる。</p>
 <p class="reveal">さあ、おいで。歓迎しよう。<strong>辺境TRPG村</strong>へ。</p>
 <p class="reveal say">「——あ、入ったらまず、ひとこと自己紹介してね。それを見て、村のみんなで相談して、あなたを迎えるの。安心して遊べる村を守るための、大事な手順なんだ」</p>
-<blockquote class="reveal"><p><strong><a href="https://discord.gg/nHEf2w3DRm" target="_blank">辺境TRPG村の門をくぐる（Discord招待）</a></strong></p></blockquote>
+
+<div class="join-cta reveal">
+ <a class="join-btn" href="https://discord.gg/nHEf2w3DRm" target="_blank" rel="noopener">
+  <span class="join-main">辺境TRPG村の門をくぐる</span>
+  <span class="join-url">discord.gg/nHEf2w3DRm</span>
+ </a>
+ <p class="join-hint">クリックすると Discord の招待ページが開きます</p>
+</div>
 <figure class="ill reveal"><img alt="村を見守る亀の後ろ姿" loading="lazy" src="img/turtle_back.jpg"><figcaption>村を見守る、くだんの亀。……おそらくリクガメ。</figcaption></figure>
 <div class="scene-break reveal"></div>
 <blockquote class="reveal"><p>多くのウミガメが回遊する美しい海を守りたい。</p></blockquote>
