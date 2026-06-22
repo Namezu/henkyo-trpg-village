@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>辺境TRPG村って、こんなところ</title><style>/* ============================================================
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet"><meta name="robots" content="noindex,nofollow"><title>辺境TRPG村って、こんなところ</title><style>/* ============================================================
    辺境TRPG村 ── Design Kit (village.css)
    このファイルが「見た目」の正本（single source of truth）。
    build_preview.py がこれを読み込んで生成HTMLに埋め込む。
@@ -192,12 +192,64 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
   details.scroll:not([open])>summary:after{animation:none}
   .toc.show{animation:none}
 }
+
+/* ============================================================
+   リッチ化パス（2026-06-22）＝より映画的・動的に
+   ============================================================ */
+/* ---- 16. Webフォント適用 ---- */
+body{font-family:'Zen Kaku Gothic New','Yu Gothic','Hiragino Kaku Gothic ProN',sans-serif}
+.hero h1{font-family:'Shippori Mincho','Yu Mincho',serif;letter-spacing:.05em}
+.doc-title.story{font-family:'Shippori Mincho','Yu Mincho',serif}
+.panel-story p,.panel-story .scene-break{font-family:'Shippori Mincho','Yu Mincho',serif}
+h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
+
+/* ---- 17. スクロール進捗バー ---- */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--hero1),var(--h2l),var(--hero2));box-shadow:0 0 10px var(--hero1)}
+
+/* ---- 18. シネマ風ビネット（全体の雰囲気・操作は透過） ---- */
+.cine{position:fixed;inset:0;pointer-events:none;z-index:40;box-shadow:inset 0 0 160px rgba(25,18,12,.13)}
+[data-theme=dark] .cine{box-shadow:inset 0 0 190px rgba(0,0,0,.5)}
+
+/* ---- 19. 没入ヒーロー：光の粒・入場・スクロール誘導 ---- */
+.hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero>*{position:relative;z-index:1}
+.hero .motes{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.hero .motes b{position:absolute;bottom:-12px;border-radius:50%;background:rgba(255,255,255,.7);filter:blur(1px);animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0}12%{opacity:.85}100%{transform:translateY(-88vh) scale(.4);opacity:0}}
+.hero h1,.hero .sub,.hero .chips,.hero .cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero .sub{animation-delay:.12s}.hero .chips{animation-delay:.24s}.hero .cta{animation-delay:.36s}
+@keyframes heroRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.hero .cue{position:absolute;bottom:16px;left:50%;color:#fff;opacity:.85;font-size:1.3em;text-decoration:none;text-shadow:0 1px 6px rgba(0,0,0,.3);animation:bob 1.8s ease-in-out infinite;z-index:2}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+
+/* ---- 20. 挿絵を映画的に（幅広＋出現でゆっくりズーム） ---- */
+.panel-story .ill{margin:2.4em -20px;overflow:hidden;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.22)}
+.panel-story .ill img{display:block;width:100%;border-radius:16px;will-change:transform;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.panel-story .ill.reveal img{transform:scale(1.09)}
+.panel-story .ill.reveal.on img{transform:scale(1)}
+.panel-story .ill figcaption{padding:.55em 20px 0}
+
+/* ---- 21. タブ切替クロスフェード＋revealの厚み ---- */
+.panel.active{animation:panelIn .5s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.reveal{transform:translateY(20px) scale(.985)}
+.reveal.on{transform:none}
+
+@media(max-width:560px){.hero{min-height:72vh}}
+@media (prefers-reduced-motion:reduce){
+  .hero .motes,.hero .cue{display:none}
+  .hero h1,.hero .sub,.hero .chips,.hero .cta,.panel.active{animation:none}
+  .panel-story .ill.reveal img{transform:none}
+}
 </style></head><body>
+<div class="progress"><i></i></div><div class="cine"></div>
 <div class="scene-bg"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
 <button class="theme-btn" onclick="toggleTheme()">🌙 ダーク</button>
 <nav class="toc"><div class="toc-h">目次</div><ul></ul></nav>
 
 <div class="hero">
+ <div class="motes"></div>
  <div class="peak">⛰️</div>
  <h1>辺境TRPG村</h1>
  <div class="sub">ルールとマナーを守って、皆で楽しく。</div>
@@ -208,6 +260,7 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
   <span class="chip">🏰 2022年から運営</span>
  </div>
  <a class="cta" href="#tabs">村をのぞいてみる →</a>
+ <a class="cue" href="#tabs" aria-label="下へ">▼</a>
 </div>
 
 <div class="wrap">
@@ -217,15 +270,15 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
  <button class="tab-btn" data-tab="story" role="tab">🐢 物語で紹介</button>
 </div>
 <div class="panel active" id="tab-plain" role="tabpanel"><h1 class="doc-title reveal">辺境TRPG村へようこそ</h1>
-<p class="reveal">ごきげんよう。<strong>辺境TRPG村</strong>は、約200人が集まるTRPGコミュニティ（Discordサーバー）です。2022年から続く、中世の村をモチーフにした小さな集落で、毎日のようにどこかで卓が立っています。</p>
-<p class="reveal">このページは、<strong>入る前に「自分に合う場所か」を見極めてもらう</strong>ためのもの。中の様子・ルール・文化を、できるだけ正直にお見せします。</p>
+<p class="reveal">ごきげんよう。<strong>辺境TRPG村</strong>は約200人が集まるTRPGコミュニティ（Discordサーバー）です。2022年から続く中世の村をモチーフにした小さな集落で、毎日のようにどこかで卓が立っています。</p>
+<p class="reveal">このページは<strong>入る前に「自分に合う場所か」を見極めてもらう</strong>ためのもの。中の様子・ルール・文化を、できるだけ正直にお見せします。</p>
 <hr>
 <h2 class="reveal">🏘 どんな場所？</h2>
 <p class="reveal">村が大切にしているのは、たったひとつ。</p>
-<blockquote class="reveal"><p><strong>参加する皆が、誰一人欠けることなく、楽しい時間を過ごせること。</strong></p></blockquote>
+<blockquote class="reveal"><p><strong>参加する皆が誰一人欠けることなく、楽しい時間を過ごせること。</strong></p></blockquote>
 <p class="reveal">そのためにGMもPLも協力し、困っている人がいれば手を差し伸べる。分からないことは遠慮なく聞ける——そんな空気が根づいています。</p>
 <ul class="reveal"><li><strong>初心者歓迎。</strong> ルールやキャラ作りでつまずいても、誰かが必ず一緒に考えます。本番前に作り方講座が開かれることも。</li><li><strong>新しい人を、先に立てる。</strong> 卓で役割を決めるとき、後から来た人の希望を優先する譲り合いが自然にあります。</li><li><strong>安全に配慮。</strong> 苦手な描写やつらいテーマは事前に確認し合い、合わないときはちゃんと配慮します。</li></ul>
-<p class="reveal">そして、この村にはひとつの<strong>理念</strong>があります——<strong>「思想や好みが違っても、工夫すれば、同じ卓を囲める」</strong>。通知が欲しい人と欲しくない人を、ボタン一つで共存させる仕組み（後述の亀Bot）も、AIへの姿勢も、住み分けレギュレーションも、すべてこの一本の芯から来ています。</p>
+<p class="reveal">そしてこの村にはひとつの<strong>理念</strong>があります——<strong>「思想や好みが違っても、工夫すれば、同じ卓を囲める」</strong>。通知が欲しい人と欲しくない人をボタン一つで共存させる仕組み（後述の亀Bot）も、AIへの姿勢も、住み分けレギュレーションも、すべてこの一本の芯から来ています。</p>
 <hr>
 <h2 class="reveal">🎲 どんな遊びができる？</h2>
 <ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・アリアンストラテジー・シノビガミ</strong> など複数システムに対応。</li><li><strong>テキストセッションも、ボイスセッションも</strong>。PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
@@ -233,7 +286,7 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 <h2 class="reveal">🗺 「レギュレーション」とは</h2>
 <p class="reveal">辺境TRPG村ならではの仕組みです。</p>
 <blockquote class="reveal"><p><strong>レギュレーション</strong> ＝ 同じシステムを「いろんなルール・目的」で遊ぶための、遊び方のパッケージ。</p></blockquote>
-<p class="reveal">ハクスラを楽しむ卓、シリアスな物語を紡ぐ卓、悪役視点で暴れる卓、雪原を切り拓くサバイバル卓……とコンセプトの違う小世界がいくつもあり、気分で選べます。詳しくは村人「てん」さん制作の解説動画もどうぞ👇</p>
+<p class="reveal">ハクスラを楽しむ卓、シリアスな物語を紡ぐ卓、魔族として勇者を倒す卓、氷原を切り拓くサバイバル卓……とコンセプトの違う小世界がいくつもあり、気分で選べます。詳しくは村人「てん」さん制作の解説動画もどうぞ👇</p>
 <p class="reveal">🎬 <strong>【辺境TRPG村】レギュレーションって何？</strong> </p>
 <div class="vid reveal"><iframe src="https://www.youtube.com/embed/mytAr50pWGc" frameborder="0" allowfullscreen></iframe></div>
 <hr>
@@ -247,7 +300,7 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 </div>
 
 <p class="reveal">ロールによって、見られるチャンネルが段階的に開きます。</p>
-<ul class="reveal"><li><strong><span class="role role-tab">@旅人</span></strong>（青）：自己紹介後に付く入村ロール。PLとして参加でき、多くのチャンネルが見えます。</li><li><strong><span class="role role-min">@領民</span></strong>（緑）：GMとして卓を立てる人のロール。卓・チャンネルの作成権を持ちます。</li><li><strong><span class="role role-kni">@騎士</span></strong>（橙）：中央から村へ遣わされ、委任を受けて治安と秩序を預かる副管理者。法と秩序に則って対応する権限を持ちます。</li><li><strong><span class="role role-exe">@執政官</span></strong>（紫）：騎士たちの代表として、村の統治を担う管理者。</li><li><strong>🐢 亀Bot（リアクションロール）</strong>：遊びたいシステムの募集通知を受け取りたい人だけが、ボタンを押してロールを取得。<strong>「通知が欲しい人／欲しくない人」を同じ村で共存させる</strong>ための仕組みです。</li></ul>
+<ul class="reveal"><li><strong><span class="role role-tab">@旅人</span></strong>（青）：参加時の審査を経て付与される入村ロール。PLとして参加でき、多くのチャンネルが見えます。（<strong>審査制のため、結果によっては付与されない＝ご参加をお断りすることもあります。</strong>）</li><li><strong><span class="role role-min">@領民</span></strong>（緑）：GMとして卓を立てる人のロール。申請のうえ管理メンバーの協議で決まります（自動付与ではありません）。卓・チャンネルの作成権を持ちます。</li><li><strong><span class="role role-kni">@騎士</span></strong>（橙）：中央から村へ遣わされ、委任を受けて治安と秩序を預かる副管理者。法と秩序に則って対応する権限を持ちます。</li><li><strong><span class="role role-exe">@執政官</span></strong>（紫）：騎士たちの代表として、村の統治を担う管理者。</li><li><strong>🐢 亀Bot（リアクションロール）</strong>：遊びたいシステムの募集通知を受け取りたい人だけがボタンを押してロールを取得。<strong>「通知が欲しい人／欲しくない人」を同じ村で共存させる</strong>ための仕組みです。</li></ul>
 <hr>
 <h2 class="reveal">📜 村のルール</h2>
 <p class="reveal">安心して遊ぶための <strong>「法と秩序」</strong> があります。まず押さえてほしい精神は、この3つ。</p>
@@ -369,12 +422,12 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 <p class="law-p">当サーバーで最初にセッション参加希望前にはPLガイド（ 📜plガイド ）、セッション募集する前にはGMガイド（ 📜gmガイド ）を必ず確認し、記載に従いしかるべき対応を実施してください。</p></div></details>
 <hr>
 <h2 class="reveal">🚪 参加してからの流れ</h2>
-<ol class="reveal steps"><li>参加 →「はじめに」と「法と秩序」を読む →「自己紹介」を書く</li><li>管理者が確認して、<strong>専用ロール（旅人）を付与</strong>。これで必要なチャンネルが開きます</li><li><strong>GMをやりたくなったら</strong>、領民ロールを申請</li></ol>
-<p class="reveal">承認制なのは、皆が安心して過ごせる村を守るため。（※荒らし対策で、参加直後の10分間は書き込みができません）</p>
+<ol class="reveal steps"><li>参加 →「はじめに」と「法と秩序」を読む →「自己紹介」を書く</li><li>管理者が<strong>参加時の審査</strong>を行い、問題なければ<strong>専用ロール（旅人）を付与</strong>。これで必要なチャンネルが開きます</li><li><strong>GMをやりたくなったら</strong>、領民ロールを申請（管理メンバーの協議で決まります）</li></ol>
+<p class="reveal">承認制（参加時審査）なのは皆が安心して過ごせる村を守るため。<strong>そのため審査の結果によっては、ご参加（ロールの付与）をお断りすることもあります。</strong>（※荒らし対策で、参加直後の10分間は書き込みができません）</p>
 <hr>
 <h2 class="reveal">🤖 生成AIについて、村のスタンス</h2>
-<p class="reveal">辺境TRPG村は、生成AIの利用を <strong>禁止していません</strong>（イラスト生成・GMのシナリオ準備の補助などに活用されています）。そのうえで、<strong>絵を描く人への敬意</strong>を欠かさないことを大切にしています——「AIを使うこと」と「絵を大切にすること」は対立しません。村はそのどちらも尊重します。</p>
-<p class="reveal">これは、日本の現行法（著作権法 第30条の4 ほか）と、文化庁「AIと著作権に関する考え方について」（2024年）を踏まえた運用です。AIの学習は一定の条件のもとで認められ、生成物は従来どおり「<strong>類似性</strong>」と「<strong>依拠性</strong>」で侵害が判断される——という整理に沿っています（＝「AIだから何でも合法」ではありません）。この分野は議論が進行中のため、村の方針も最新の公的見解に応じて見直します。</p>
+<p class="reveal">辺境TRPG村は生成AIの利用を <strong>禁止していません</strong>（イラスト生成・GMのシナリオ準備の補助などに活用されています）。そのうえで<strong>絵を描く人への敬意</strong>を欠かさないことを大切にしています——「AIを使うこと」と「絵を大切にすること」は対立しません。村はそのどちらも尊重します。</p>
+<p class="reveal">これは日本の現行法（著作権法 第30条の4 ほか）と文化庁「AIと著作権に関する考え方について」（2024年）を踏まえた運用です。AIの学習は一定の条件のもとで認められ、生成物は従来どおり「<strong>類似性</strong>」と「<strong>依拠性</strong>」で侵害が判断される——という整理に沿っています（＝「AIだから何でも合法」ではありません）。この分野は議論が進行中のため、村の方針も最新の公的見解に応じて見直します。</p>
 <details class="reveal scroll"><summary>法的・公的な位置づけを読む</summary><div class="dbody"><ul>
 <li><strong>学習段階</strong>：日本の著作権法 <strong>第30条の4</strong> は、情報解析（AIの学習など）のための著作物の利用を、一定の条件のもとで認める規定を置いています。<strong>これは無制限の許可ではありません。</strong>「著作権者の利益を不当に害する場合」など、対象外となるケースも定められています。</li>
 <li><strong>生成・利用段階</strong>：文化庁・文化審議会「<strong>AIと著作権に関する考え方について</strong>」（2024年）は、AIの生成物については<strong>従来の著作権法と同じ基準</strong>——「<strong>類似性</strong>」と「<strong>依拠性</strong>」——で侵害を判断するとしています。つまり「AIだから何でも合法」というわけではありません。なお、この『考え方』は法的拘束力のある規則ではなく、現行法の解釈を示す指針で、最終的な判断は個別の事案ごと（最終的には裁判所）で行われます。</li>
@@ -382,10 +435,10 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
 <li><strong>見直し</strong>：この分野は、まだ議論が進んでいる最中です。村の運用も、最新の公的な見解に応じて見直されていきます。</li>
 </ul>
 <p><small class="muted">参考：<a href="https://laws.e-gov.go.jp/document?lawid=345AC0000000048" target="_blank">著作権法30条の4（e-Gov）</a>／<a href="https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html" target="_blank">文化庁「AIと著作権について」</a>／<a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank">同「考え方」(2024)</a></small></p></div></details>
-<p class="reveal">節度ある批判・議論は歓迎しますが、事実に基づかない誹謗中傷・嫌がらせには、村として毅然と対応します。</p>
+<p class="reveal">節度ある批判・議論は歓迎しますが、事実に基づかない誹謗中傷・嫌がらせには村として毅然と対応します。</p>
 <hr>
 <h2 class="reveal">✉️ 村に遊びに来るなら</h2>
-<p class="reveal">ここまで読んでくださって、ありがとうございました。「合いそうだ」と感じたなら、心から歓迎します。</p>
+<p class="reveal">ここまで読んでくださってありがとうございました。「合いそうだ」と感じたなら、心から歓迎します。</p>
 <blockquote class="reveal"><p>🔗 <strong>参加リンク：</strong><a href="https://discord.gg/nHEf2w3DRm" target="_blank">辺境TRPG村へ（Discord）</a></p></blockquote>
 <p class="reveal">楽しいTRPGライフを、辺境TRPG村で。</p></div>
 <div class="panel panel-story" id="tab-story" role="tabpanel" hidden><h1 class="doc-title story reveal">辺境TRPG村 ── 記憶をなくした俺の、ある長い一日</h1>
@@ -650,10 +703,13 @@ details.scroll:not([open])>summary:after{animation:openNudge 3.6s ease-in-out in
  function revealIn(root){(root||document).querySelectorAll(".reveal").forEach(function(el){el.classList.add("on")})}
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}})},{threshold:.10});
  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
- // スクロール連動の背景（--sy = scrollY を供給）
- var bd=document.body;
- function onScroll(){bd.style.setProperty("--sy", window.scrollY||window.pageYOffset||0)}
- window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
+ // スクロール連動の背景（--sy）＋進捗バー
+ var bd=document.body, pbar=document.querySelector(".progress i");
+ function onScroll(){var st=window.scrollY||window.pageYOffset||0;bd.style.setProperty("--sy",st);if(pbar){var h=document.documentElement.scrollHeight-window.innerHeight;pbar.style.width=(h>0?(st/h*100).toFixed(2):0)+"%"}}
+ window.addEventListener("scroll",onScroll,{passive:true}); window.addEventListener("resize",onScroll,{passive:true}); onScroll();
+ // ヒーローの光の粒
+ var mt=document.querySelector(".hero .motes");
+ if(mt){for(var i=0;i<16;i++){var bb=document.createElement("b"),s=4+Math.random()*6;bb.style.left=(Math.random()*100)+"%";bb.style.width=bb.style.height=s+"px";bb.style.animationDuration=(6+Math.random()*8)+"s";bb.style.animationDelay=(-Math.random()*10)+"s";mt.appendChild(bb)}}
  // 追従する目次（ふつう紹介のみ・広い画面でCSS表示）
  var spyObs=null;
  function spy(panel){
