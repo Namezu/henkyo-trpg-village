@@ -29,6 +29,8 @@
   --tab-bg:#efe7d8; --tab-ink:#8a7f6c; --tab-on:#fff; --tab-on-bg:#c2683f;
   /* 巻物（パーチメント） */
   --scr-bg:#f7eed9; --scr-bg2:#efe1c4; --scr-ln:#cdb487; --scr-ink:#5a4a30;
+  /* 卓数ヒートマップ（強度で濃淡・テーマ追従） */
+  --heat-rgb:38,110,170;
 }
 [data-theme=dark]{
   --bg:#1a1b1e; --tx:#dadce0; --card:#26282c;
@@ -41,6 +43,7 @@
   --hero1:#b8553a; --hero2:#3c5249;
   --tab-bg:#2c2e33; --tab-ink:#9aa0a8; --tab-on:#fff; --tab-on-bg:#c2683f;
   --scr-bg:#2b2823; --scr-bg2:#332e26; --scr-ln:#5c4f38; --scr-ink:#e3d3ad;
+  --heat-rgb:96,172,230;
 }
 
 /* ---- 2. ベース ------------------------------------------- */
@@ -338,6 +341,21 @@ h2.reveal:not(.on){transform:translateX(-26px)}
   filter:blur(2px);opacity:.30;will-change:background-position}
 [data-theme=dark] .illbg{opacity:.20}
 
+/* ---- 12b. いつ卓が立つ？ヒートマップ（HTMLネイティブ・テーマ追従） ---- */
+.when{margin:1.6em 0}
+.when-title{font-weight:700;font-size:1.06em;color:var(--h2);margin-bottom:.7em}
+.when-title span{display:block;font-weight:400;font-size:.78em;color:var(--mut);margin-top:2px}
+.when-grid{display:grid;grid-template-columns:2.2em 1fr 1fr 1.25fr;gap:5px}
+.when-h{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:.86em;font-weight:700;color:var(--mut);padding-bottom:3px;line-height:1.25}
+.when-h small{font-weight:400;font-size:.8em;opacity:.85}
+.when-h-night{color:var(--lk)}
+.when-day{display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--h3)}
+.when-c{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:10px;font-weight:700;font-size:1.05em;color:var(--tx);background:rgba(var(--heat-rgb),var(--v,0));border:1px solid var(--cln);transition:background .3s}
+.when-c.hot{color:#fff;border-color:transparent}
+.when-c.zero{color:var(--mut);opacity:.45;font-weight:400;background:transparent}
+.when-cap{margin-top:.8em;font-size:.9em;color:var(--mut);text-align:center;line-height:1.6}
+@media(max-width:480px){.when-grid{gap:4px}.when-c{min-height:38px;font-size:.98em}.when-h{font-size:.78em}}
+
 /* 28. 操作ボタン（テーマ＋BGM）を右上にまとめる */
 .controls{position:fixed;top:12px;right:12px;z-index:99;display:flex;gap:8px;align-items:center}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
@@ -384,22 +402,22 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal">このページは<strong>辺境TRPG村に入る前に「自分に合う場所か」を見極めてもらう</strong>ためのものです。サーバーの中の様子・ルール・文化を、お伝えいたします。</p>
 <hr>
 <h2 class="reveal">どんな場所？</h2>
-<p class="reveal">村が大切にしているのは、たったひとつ。</p>
-<blockquote class="reveal"><p><strong>参加する皆が誰一人欠けることなく、楽しい時間を過ごせること。</strong></p></blockquote>
+<p class="reveal">村が何より大切にしているのは、たったひとつ。</p>
+<blockquote class="reveal"><p><strong>ひとつひとつのセッション（卓）を、参加者みんなが気持ちよく終えられること。</strong></p></blockquote>
 <p class="reveal">そのためにGMもPLも協力し、困っている人がいれば手を差し伸べる。分からないことは遠慮なく聞ける——そんな空気が根づいています。</p>
 <ul class="reveal"><li><strong>初心者歓迎。</strong> ルールやキャラ作りでつまずいても、誰かが必ず一緒に考えます。本番前に作り方講座が開かれることも。</li><li><strong>新しい人が入りやすいように。</strong> 卓で役割を決めるとき、初参加の人の希望を聞き合う譲り合いが自然にあります。</li><li><strong>安全に配慮。</strong> 苦手な描写やつらいテーマは事前に確認し合い、合わないときはちゃんと配慮します。</li></ul>
-<p class="reveal">この村が何より大事にしているのは、ひとつひとつの<strong>セッション（卓）</strong>です。そして参加者みんなが卓を気持ちよく終えるための鍵が、<strong>コンセンサス</strong>——遊ぶ前の、ちょっとした擦り合わせ。苦手なことの事前共有も、通知の有無（後述の亀Bot）も、住み分けレギュレーションも、根っこはここにあります。</p>
+<p class="reveal">そして、その卓を気持ちよく終えるための鍵が、<strong>コンセンサス</strong>——遊ぶ前の、ちょっとした擦り合わせです。苦手なことの事前共有も、通知の有無（後述の亀Bot）も、住み分けレギュレーションも、根っこはここにあります。</p>
 
 <div class="cutin reveal">
- <h4>ところで……『コンセンサス』ってなに！？</h4>
- <p>セッションの前に「やりたいこと・苦手なこと・時間や方向性」を、参加者どうしで<strong>先に擦り合わせておく</strong>こと。地雷やすれ違いを防いで、<strong>全員が気持ちよく卓を終える</strong>ための、村でいちばん大事なお作法だよ。</p>
+ <h4>『コンセンサス』とは？</h4>
+ <p>セッションの前に「やりたいこと・苦手なこと・時間や方向性」を、参加者どうしで<strong>先に擦り合わせておく</strong>ことです。地雷やすれ違いを防ぎ、<strong>全員が気持ちよく卓を終える</strong>ための、村でいちばん大事なお作法です。</p>
 </div>
 
 <hr>
 <h2 class="reveal">どんな遊びができる？</h2>
-<ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・アリアンストラテジー・シノビガミ</strong> など複数システムに対応。</li><li><strong>テキストセッションも、ボイスセッションも</strong>。PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
+<ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・アリアンストラテジー・シノビガミ</strong> など複数システムに対応。</li><li><strong>進め方は“半テキスト”がほとんど</strong>：<strong>ココフォリア</strong>（オンラインセッション支援ツール）に集まって、<strong>スキル宣言・ロールプレイ・描写はテキスト</strong>で、<strong>雑談や相談はVC（ボイスチャット）</strong>で——という形が中心です。VCは<strong>聞き専（聞くだけ）の参加もOK</strong>。読み上げBOTを使えば、声を出さずに加わることもできます。</li><li>PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
 <p class="reveal">そして「いつ卓が立つのか」も、けっこう大事な情報ですよね。直近の実績をグラフにしてみました</p>
-<figure class="ill reveal"><img alt="曜日×時間帯ごとの卓数ヒートマップ" loading="lazy" src="img/when_heatmap.png"></figure>
+<figure class="when reveal"><div class="when-title">いつ卓が立つ？<span>直近3か月の実績（2026年4〜6月・約125卓）</span></div><div class="when-grid"><div class="when-h"></div><div class="when-h">昼<small>9–15時</small></div><div class="when-h">夕<small>16–20時</small></div><div class="when-h when-h-night">夜<small>21時〜</small></div><div class="when-day">月</div><div class="when-c" style="--v:0.04">1</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.65">15</div><div class="when-day">火</div><div class="when-c" style="--v:0.04">1</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.61">14</div><div class="when-day">水</div><div class="when-c" style="--v:0.09">2</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.61">14</div><div class="when-day">木</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.57">13</div><div class="when-day">金</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.74">17</div><div class="when-day">土</div><div class="when-c" style="--v:0.09">2</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.61">14</div><div class="when-day">日</div><div class="when-c" style="--v:0.35">8</div><div class="when-c" style="--v:0.04">1</div><div class="when-c hot" style="--v:1.00">23</div></div><div class="when-cap">平日は夜21時〜が中心／昼の卓は土日に多め（日曜がいちばん活発）</div></figure>
 <p class="reveal"><strong>平日はほぼ夜（21時〜）が中心。昼の卓は土日に多め</strong>（とくに日曜が活発）。まずは時間が合いそうか、のぞいてみてください。もちろん、<strong>まだ卓が少ない時間帯を、あなたが開拓してくれても大歓迎</strong>です。</p>
 <hr>
 <h2 class="reveal">「レギュレーション」とは</h2>
@@ -585,8 +603,8 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal">妙なものだが娘は気にも留めない。まるで俺の返事をちゃんと聞き取ったかのように微笑んで先を歩き出す。……どうせ行く当ても無い身だ。ついて行くとしようか。</p>
 <div class="scene-break reveal"></div>
 <p class="reveal">村は嘘をつかなかった。</p>
-<p class="reveal">そこかしこで卓が立っている。テキストで、声で。盤上では剣が交わり、酒場では笑いが弾ける。誰かが派手にダイスを外して一同そろって頭を抱えていた。</p>
-<p class="reveal say">「ほぼ毎日どこかで卓が立つの。アリアンロッドが多いけど、CoCもダブルクロスもいろいろ。テキストでも声でもね。初めての人も多いんだよ。分かんなかったら誰かが必ず横につくし、見学だけでも歓迎」</p>
+<p class="reveal">そこかしこで卓が立っている。おもに文字で言葉を交わし、声はそのかたわらに。盤上では剣が交わり、酒場では笑いが弾ける。誰かが派手にダイスを外して一同そろって頭を抱えていた。</p>
+<p class="reveal say">「ほぼ毎日どこかで卓が立つの。アリアンロッドが多いけど、CoCもダブルクロスもいろいろ。スキルやお芝居は文字で、おしゃべりや相談は通話でね。通話は聞くだけの参加もできるし、読み上げの仕組みもあるから、声を出すのが苦手でも大丈夫。初めての人も多いんだよ。分かんなかったら誰かが横についてくれるし、見学だけでも歓迎」</p>
 <p class="reveal">気楽なものだ。……ただ、胸の奥がちりりと疼く。はて、なぜだろうな。</p>
 <p class="reveal">ふいに記憶の底で何かが灯った。霧に沈む村。途切れたままの子守唄。雪原をゆく長い隊列。誰かの分身が別の誰かへそっと手を差し伸べるその一瞬——。知りもせぬ景色のはずがなぜかひどく懐かしい。</p>
 <div class="scene-break reveal"></div>
@@ -729,7 +747,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal">——と、ここで悪い癖が出た。</p>
 <p class="reveal">俺はしみじみと思う。</p>
 <p class="reveal">人はみなそれぞれに違う夢を見る。たったその違いひとつのために人は擦れ違い、時に背を向け合ってきた。——俺の知るかぎりでもずいぶんと永い、古い古い宿題だ。</p>
-<p class="reveal">それをこの村ときたら、当たり前の顔で隣り合わせにやってのけている。</p>
+<p class="reveal">それがこの村では、ただ静かに隣り合っている。</p>
 <p class="reveal say">「亀さん、なんか遠い目してる」</p>
 <p class="reveal">……いや、なんでもない。胸の内でそう返す。むろん声にはならない。</p>
 <div class="scene-break reveal"></div>
@@ -799,7 +817,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal">それをこの村は——一匹の亀に解かせてしまった。</p>
 <p class="reveal">何百という「はい」。どれ一つ同じものはない。好むシステムも、通知の好みも、信じるものさえ、てんでにばらばらだ。</p>
 <p class="reveal">だが、そのばらばらがボタン一つで同じ卓を囲んでいる。</p>
-<p class="reveal">これは——銀河の片隅にひっそりと起きた、ささやかで途方もない奇跡だ。</p>
+<p class="reveal">これは——銀河の片隅でひっそり起きた、ささやかな出来事だ。それがどうにも、俺には大きく見えてならない。</p>
 <p class="reveal say">「亀さん、スケールでかすぎ。ただの通知設定だよ？」</p>
 <p class="reveal">……お嬢さんにはまだ見えないのかもしれないな。この一押しの、本当の重さが。</p>
 <p class="reveal">胸の内でそっとそう思う。むろん声にはならない。</p>
@@ -807,7 +825,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <p class="reveal say">「あなたは、『<strong>好みが違っても、ひと工夫で同じ村にいられる</strong>』——その小さな証拠なの」</p>
 <p class="reveal">……柄ではない。だが、存外悪くない役回りだ。</p>
 <p class="reveal">——見知らぬ村へ入るとき、人はわけもなく身構えるものらしい。『ビッグ・ブラザーがあなたを見ている』。オーウェルの描いた、あの薄ら寒い監視者でも待ち受けているのかと。だが安心しろ。この村の門で旅人を待つのは、居眠り癖のある亀が一匹きり。見張るためじゃない。迎えるためにいる。</p>
-<p class="reveal">なんのことはない。その正体は——どうやらずいぶんと優しい村で旅人をいちばん最初に迎える、ただの一匹の亀だったらしい。</p>
+<p class="reveal">なんのことはない。その正体は——どうやらこの村で旅人をいちばん最初に迎える、ただの一匹の亀だったらしい。</p>
 <div class="scene-break reveal"></div>
 <figure class="ill reveal"><img alt="「……新しい旅人。迷ってるみたい」" loading="lazy" src="img/05.jpg"><figcaption>「……新しい旅人。迷ってるみたい」</figcaption></figure>
 <p class="reveal say">「あっ」</p>
