@@ -341,20 +341,28 @@ h2.reveal:not(.on){transform:translateX(-26px)}
   filter:blur(2px);opacity:.30;will-change:background-position}
 [data-theme=dark] .illbg{opacity:.20}
 
-/* ---- 12b. いつ卓が立つ？ヒートマップ（HTMLネイティブ・テーマ追従） ---- */
-.when{margin:1.6em 0}
-.when-title{font-weight:700;font-size:1.06em;color:var(--h2);margin-bottom:.7em}
+/* ---- 12b. いつ卓が立つ？（結論3段＋週リズム・不透明カード・テーマ追従） ---- */
+.when2{background:var(--card);border:1px solid var(--cln);border-radius:14px;padding:18px;margin:1.6em 0;box-shadow:0 4px 16px rgba(0,0,0,.07)}
+[data-theme=dark] .when2{box-shadow:0 6px 20px rgba(0,0,0,.34)}
+.when-title{font-weight:700;font-size:1.06em;color:var(--h2);margin-bottom:.6em}
 .when-title span{display:block;font-weight:400;font-size:.78em;color:var(--mut);margin-top:2px}
-.when-grid{display:grid;grid-template-columns:2.2em 1fr 1fr 1.25fr;gap:5px}
-.when-h{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:.86em;font-weight:700;color:var(--mut);padding-bottom:3px;line-height:1.25}
-.when-h small{font-weight:400;font-size:.8em;opacity:.85}
-.when-h-night{color:var(--lk)}
-.when-day{display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--h3)}
-.when-c{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:10px;font-weight:700;font-size:1.05em;color:var(--tx);background:rgba(var(--heat-rgb),var(--v,0));border:1px solid var(--cln);transition:background .3s}
-.when-c.hot{color:#fff;border-color:transparent}
-.when-c.zero{color:var(--mut);opacity:.45;font-weight:400;background:transparent}
-.when-cap{margin-top:.8em;font-size:.9em;color:var(--mut);text-align:center;line-height:1.6}
-@media(max-width:480px){.when-grid{gap:4px}.when-c{min-height:38px;font-size:.98em}.when-h{font-size:.78em}}
+.w2-points{display:flex;flex-direction:column;gap:9px;margin:.2em 0 1.2em}
+.w2-pt{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;gap:10px}
+.w2-pt b{font-weight:700;color:var(--h3);white-space:nowrap}
+.w2-pt b small{font-weight:400;font-size:.72em;color:var(--mut);margin-left:3px}
+.w2-pt>span{color:var(--tx)}
+.w2-night b{color:var(--lk)}
+.w2-night>span{font-weight:700}
+.w2-mute{opacity:.66}
+.w2-week{display:grid;grid-template-columns:1.7em 1fr;gap:7px 9px;align-items:end;border-top:1px dashed var(--cln);padding-top:13px}
+.w2-rl{font-size:.8em;font-weight:700;color:var(--mut);justify-self:end;align-self:center}
+.w2-row{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;align-items:end}
+.w2-cell{display:flex;align-items:flex-end;justify-content:center}
+.w2-bar{width:74%;background:rgb(var(--heat-rgb));border-radius:4px 4px 2px 2px}
+.w2-bar.zero{background:var(--cln);opacity:.7}
+.w2-days{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.w2-d{text-align:center;font-size:.82em;font-weight:700;color:var(--h3)}
+@media(max-width:480px){.when2{padding:14px}.w2-pt{grid-template-columns:4.7em 1fr;gap:7px}.w2-row,.w2-days{gap:5px}}
 
 /* 28. 操作ボタン（テーマ＋BGM）を右上にまとめる */
 .controls{position:fixed;top:12px;right:12px;z-index:99;display:flex;gap:8px;align-items:center}
@@ -417,7 +425,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <h2 class="reveal">どんな遊びができる？</h2>
 <ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・アリアンストラテジー・シノビガミ</strong> など複数システムに対応。</li><li><strong>進め方は“半テキスト”がほとんど</strong>：<strong>ココフォリア</strong>（オンラインセッション支援ツール）に集まって、<strong>スキル宣言・ロールプレイ・描写はテキスト</strong>で、<strong>雑談や相談はVC（ボイスチャット）</strong>で——という形が中心です。VCは<strong>聞き専（聞くだけ）の参加もOK</strong>。読み上げBOTを使えば、声を出さずに加わることもできます。</li><li>PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
 <p class="reveal">そして「いつ卓が立つのか」も、けっこう大事な情報ですよね。直近の実績をグラフにしてみました</p>
-<figure class="when reveal"><div class="when-title">いつ卓が立つ？<span>直近3か月の実績（2026年4〜6月・約125卓）</span></div><div class="when-grid"><div class="when-h"></div><div class="when-h">昼<small>9–15時</small></div><div class="when-h">夕<small>16–20時</small></div><div class="when-h when-h-night">夜<small>21時〜</small></div><div class="when-day">月</div><div class="when-c" style="--v:0.04">1</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.65">15</div><div class="when-day">火</div><div class="when-c" style="--v:0.04">1</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.61">14</div><div class="when-day">水</div><div class="when-c" style="--v:0.09">2</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.61">14</div><div class="when-day">木</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.57">13</div><div class="when-day">金</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.74">17</div><div class="when-day">土</div><div class="when-c" style="--v:0.09">2</div><div class="when-c zero" style="--v:0.00">·</div><div class="when-c hot" style="--v:0.61">14</div><div class="when-day">日</div><div class="when-c" style="--v:0.35">8</div><div class="when-c" style="--v:0.04">1</div><div class="when-c hot" style="--v:1.00">23</div></div><div class="when-cap">平日は夜21時〜が中心／昼の卓は土日に多め（日曜がいちばん活発）</div></figure>
+<figure class="when2 reveal"><div class="when-title">いつ卓が立つ？<span>直近3か月の実績（2026年4〜6月・約125卓）</span></div><div class="w2-points"><div class="w2-pt w2-night"><b>夜<small>21時〜</small></b><span>ほぼ毎晩たくさん（各日13〜23卓）</span></div><div class="w2-pt"><b>昼<small>9〜15時</small></b><span>土日が中心（とくに日曜の8卓）</span></div><div class="w2-pt w2-mute"><b>夕<small>16〜20時</small></b><span>ほとんどありません</span></div></div><div class="w2-week"><div class="w2-rl">夜</div><div class="w2-row"><div class="w2-cell"><div class="w2-bar" style="height:34px" title="15卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:32px" title="14卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:32px" title="14卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:29px" title="13卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:38px" title="17卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:32px" title="14卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:52px" title="23卓"></div></div></div><div class="w2-rl">昼</div><div class="w2-row"><div class="w2-cell"><div class="w2-bar" style="height:4px" title="1卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:4px" title="1卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:5px" title="2卓"></div></div><div class="w2-cell"><div class="w2-bar zero" style="height:4px" title="0卓"></div></div><div class="w2-cell"><div class="w2-bar zero" style="height:4px" title="0卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:5px" title="2卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:18px" title="8卓"></div></div></div><div class="w2-rl"></div><div class="w2-days"><div class="w2-d">月</div><div class="w2-d">火</div><div class="w2-d">水</div><div class="w2-d">木</div><div class="w2-d">金</div><div class="w2-d">土</div><div class="w2-d">日</div></div></div></figure>
 <p class="reveal"><strong>平日はほぼ夜（21時〜）が中心。昼の卓は土日に多め</strong>（とくに日曜が活発）。まずは時間が合いそうか、のぞいてみてください。もちろん、<strong>まだ卓が少ない時間帯を、あなたが開拓してくれても大歓迎</strong>です。</p>
 <hr>
 <h2 class="reveal">「レギュレーション」とは</h2>
@@ -441,9 +449,9 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <blockquote class="reveal"><p><strong>ざっくり言うと</strong>：旅人＝遊ぶ人（PL）／領民＝卓を立てる人（GM）／騎士＝見回り役（副管理者）／執政官＝まとめ役（管理者）。亀Botは「通知ほしい人だけ」の受け取りスイッチ。上から順に、見られる場所が広がります。</p></blockquote>
 <hr>
 <h2 class="reveal">村のルール</h2>
-<p class="reveal">安心して遊ぶための <strong>「法と秩序」</strong> があります。まず押さえてほしい精神は、この3つ。</p>
+<p class="reveal">安心して遊ぶための <strong>「法と秩序（サーバールール）」</strong> があります。まず押さえてほしい精神は、この3つ。</p>
 <ol class="reveal steps"><li><strong>相手の立場になって、気持ちよく遊ぶ。</strong></li><li><strong>困ったら、自分で裁かず管理者へ。</strong>（措置は皆の合議で公正に）</li><li><strong>コンセンサスを大切に。</strong>（特別なRPや配慮が要ることは事前に擦り合わせる）</li></ol>
-<details class="reveal scroll"><summary>法と秩序 全文を読む</summary><div class="dbody"><h4 class="law-h">■ コミュニティサーバーの秩序を維持する為に守るべき法</h4>
+<details class="reveal scroll"><summary>法と秩序（サーバールール） 全文を読む</summary><div class="dbody"><h4 class="law-h">■ コミュニティサーバーの秩序を維持する為に守るべき法</h4>
 <div class="sp"></div>
 <p class="law-a"><strong>第一項「トラブル対策1-騎士・執政官への相談」</strong></p>
 <p class="law-p">サーバー内でトラブルが発生した場合（またはトラブルの発生が予期される場合）、早期に管理メンバー( <span class="role role-kni">@騎士</span> 、 <span class="role role-exe">@執政官</span> )にDM等で相談を行なう事。相談を受けた管理メンバーは状況を調べ、第七項(違反者への措置)に基づき、公正な立場で仲裁・解決・措置(注意、警告、追放、謹慎等)を行なう事。</p>
