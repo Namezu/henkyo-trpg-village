@@ -336,11 +336,11 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 @media (prefers-reduced-motion:reduce){.fog span{animation:none}}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
-.illbg{position:fixed;inset:-2%;z-index:-1;background-repeat:no-repeat;background-size:cover;
-  background-position:center calc(8% + var(--sp,0)*84%);
-  filter:blur(2.5px);opacity:.30;will-change:background-position}
+.illbg{position:fixed;inset:0;z-index:-1;background-repeat:no-repeat;background-size:130% auto;
+  background-position:center calc(var(--sy,0) * -0.2px);
+  filter:blur(3.5px);opacity:.30;will-change:background-position}
 [data-theme=dark] .illbg{opacity:.20}
-body.bg-static .illbg{background-position:center 50%}
+body.bg-static .illbg{background-position:center}
 .bg-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 
 /* ---- 12b. いつ卓が立つ？（結論3段＋週リズム・不透明カード・テーマ追従） ---- */
@@ -371,7 +371,7 @@ body.bg-static .illbg{background-position:center 50%}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
 @media(max-width:560px){.controls{top:auto;bottom:14px;right:14px}}
 
-@media (prefers-reduced-motion:reduce){.illbg{background-position:center 50%}}
+@media (prefers-reduced-motion:reduce){.illbg{background-position:center}}
 
 /* 29. 物語：少女のセリフ(.say)を地の文(亀)と視覚的に区別 */
 /*   亀＝明朝の地の文／少女＝丸ゴシック＋緑の縦線＋淡い色地で"明るい声"を演出 */
