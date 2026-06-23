@@ -336,10 +336,12 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 @media (prefers-reduced-motion:reduce){.fog span{animation:none}}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
-.illbg{position:fixed;inset:-10% -8%;z-index:-1;background-repeat:no-repeat;background-size:240% auto;
-  background-position:calc(var(--sp,0)*100%) center;
+.illbg{position:fixed;inset:-2%;z-index:-1;background-repeat:no-repeat;background-size:cover;
+  background-position:center calc(30% + var(--sp,0)*40%);
   filter:blur(2px);opacity:.30;will-change:background-position}
 [data-theme=dark] .illbg{opacity:.20}
+body.bg-static .illbg{background-position:center 50%}
+.bg-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 
 /* ---- 12b. いつ卓が立つ？（結論3段＋週リズム・不透明カード・テーマ追従） ---- */
 .when2{background:var(--card);border:1px solid var(--cln);border-radius:14px;padding:18px;margin:1.6em 0;box-shadow:0 4px 16px rgba(0,0,0,.07)}
@@ -369,7 +371,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
 @media(max-width:560px){.controls{top:auto;bottom:14px;right:14px}}
 
-@media (prefers-reduced-motion:reduce){.illbg{background-position:50% center}}
+@media (prefers-reduced-motion:reduce){.illbg{background-position:center 50%}}
 
 /* 29. 物語：少女のセリフ(.say)を地の文(亀)と視覚的に区別 */
 /*   亀＝明朝の地の文／少女＝丸ゴシック＋緑の縦線＋淡い色地で"明るい声"を演出 */
@@ -380,11 +382,11 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 
 /* 30. BGM音量つまみ */
 .bgm-vol{width:74px;vertical-align:middle;accent-color:var(--lk);cursor:pointer}
-.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}.illbg{background-image:url(img/scroll_pano.jpg)}</style></head><body>
+.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}.illbg{background-image:url(img/scroll_pano_v.jpg)}</style></head><body>
 <div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div>
 <div class="illbg"></div>
 <div class="fog"><span></span><span></span><span></span></div>
-<div class="controls"><button class="theme-btn" onclick="toggleTheme()">ダークモード</button><button class="bgm-btn" id="bgmBtn" aria-label="BGMの再生/停止">BGM：オフ</button><input type="range" id="bgmVol" class="bgm-vol" min="0" max="100" value="35" aria-label="音量" title="音量"><audio id="bgm" loop preload="none" src="bgm.mp3"></audio></div>
+<div class="controls"><button class="theme-btn" onclick="toggleTheme()">ダークモード</button><button class="bg-btn" id="bgMotionBtn" aria-pressed="false">背景の動き：オン</button><button class="bgm-btn" id="bgmBtn" aria-label="BGMの再生/停止">BGM：オフ</button><input type="range" id="bgmVol" class="bgm-vol" min="0" max="100" value="35" aria-label="音量" title="音量"><audio id="bgm" loop preload="none" src="bgm.mp3"></audio></div>
 <nav class="toc"><div class="toc-h">目次</div><ul></ul></nav>
 
 <div class="hero">
@@ -919,6 +921,13 @@ h2.reveal:not(.on){transform:translateX(-26px)}
  var ab=document.getElementById("bgm"), bb=document.getElementById("bgmBtn"), vol=document.getElementById("bgmVol");
  if(ab&&vol){ab.volume=vol.value/100; vol.addEventListener("input",function(){ab.volume=vol.value/100})}
  if(ab&&bb){bb.addEventListener("click",function(){if(ab.paused){ab.play().catch(function(){});bb.textContent="BGM：オン"}else{ab.pause();bb.textContent="BGM：オフ"}})}
+ // 背景の動きトグル（縦パン・酔い対策で停止可能／reduced-motionは既定オフ）
+ var bgBtn=document.getElementById("bgMotionBtn");
+ var prefersReduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ var savedMotion=null;try{savedMotion=localStorage.getItem("bgmotion")}catch(e){}
+ function applyMotion(off){document.body.classList.toggle("bg-static",off);if(bgBtn){bgBtn.textContent="背景の動き："+(off?"オフ":"オン");bgBtn.setAttribute("aria-pressed",String(off))}try{localStorage.setItem("bgmotion",off?"off":"on")}catch(e){}}
+ applyMotion(savedMotion?savedMotion==="off":!!prefersReduce);
+ if(bgBtn){bgBtn.addEventListener("click",function(){applyMotion(!document.body.classList.contains("bg-static"))})}
 })();
 </script>
 </body></html>
