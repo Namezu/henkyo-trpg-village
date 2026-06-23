@@ -337,8 +337,8 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
 .illbg{position:fixed;inset:-2%;z-index:-1;background-repeat:no-repeat;background-size:cover;
-  background-position:center calc(30% + var(--sp,0)*40%);
-  filter:blur(2px);opacity:.30;will-change:background-position}
+  background-position:center calc(8% + var(--sp,0)*84%);
+  filter:blur(2.5px);opacity:.30;will-change:background-position}
 [data-theme=dark] .illbg{opacity:.20}
 body.bg-static .illbg{background-position:center 50%}
 .bg-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
@@ -424,7 +424,7 @@ body.bg-static .illbg{background-position:center 50%}
 
 <hr>
 <h2 class="reveal">どんな遊びができる？</h2>
-<ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・シノビガミ</strong> など複数システムに対応。</li><li><strong>進め方は“半テキスト”がほとんど</strong>。ココフォリア（オンラインセッション支援ツール）にみんなで集まって、スキル宣言やロールプレイ、描写はテキストで打ち込みます。雑談や相談は、つないだ通話で。その通話は聞くだけの参加でもかまいませんし、読み上げBOTを使えば、声を出さずに加わることもできます。</li><li>PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
+<ul class="reveal"><li><strong>メインはアリアンロッドRPG2E改訂版。</strong> 専用カテゴリで日々卓が立っています。</li><li>ほかにも <strong>CoC・ダブルクロス3rd・ソード・ワールド2.5・シノビガミ</strong> など複数システムに対応。</li><li><strong>進め方は“半テキスト”がほとんど</strong>。ココフォリア（オンラインセッション支援ツール）にみんなで集まって、スキル宣言やロールプレイ、描写はテキストで打ち込みます。雑談や相談は、つないだ通話で。聞くだけの参加でもかまいませんし、読み上げBOTを使えば声を出さずに加われます。</li><li>PL専門での参加も、GMとして卓を立てるのも歓迎。<strong>見学・観戦</strong>の仕組みもあります。</li><li>ほぼ毎日どこかで卓が立っていて、最近はひと月に40近いセッションが動いています。</li></ul>
 <p class="reveal">「いつ卓が立つのか」も、けっこう大事な情報ですよね。直近の実績をグラフにしてみました。</p>
 <figure class="when2 reveal"><div class="when-title">いつ卓が立つ？<span>直近3か月の実績（2026年4〜6月・約125卓）</span></div><div class="w2-points"><div class="w2-pt w2-night"><b>夜<small>21時〜</small></b><span>卓のほとんどがこの時間帯（ほぼ毎晩）</span></div><div class="w2-pt"><b>昼<small>9〜15時</small></b><span>土日が中心（とくに日曜）</span></div><div class="w2-pt w2-mute"><b>夕<small>16〜20時</small></b><span>ほとんどなし</span></div></div><div class="w2-week"><div class="w2-rl">夜</div><div class="w2-row"><div class="w2-cell"><div class="w2-bar" style="height:34px" title="15卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:32px" title="14卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:32px" title="14卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:29px" title="13卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:38px" title="17卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:32px" title="14卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:52px" title="23卓"></div></div></div><div class="w2-rl">昼</div><div class="w2-row"><div class="w2-cell"><div class="w2-bar" style="height:4px" title="1卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:4px" title="1卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:5px" title="2卓"></div></div><div class="w2-cell"><div class="w2-bar zero" style="height:4px" title="0卓"></div></div><div class="w2-cell"><div class="w2-bar zero" style="height:4px" title="0卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:5px" title="2卓"></div></div><div class="w2-cell"><div class="w2-bar" style="height:18px" title="8卓"></div></div></div><div class="w2-rl"></div><div class="w2-days"><div class="w2-d">月</div><div class="w2-d">火</div><div class="w2-d">水</div><div class="w2-d">木</div><div class="w2-d">金</div><div class="w2-d">土</div><div class="w2-d">日</div></div></div></figure>
 <p class="reveal"><strong>平日はほぼ夜（21時〜）が中心。昼の卓は土日に多め</strong>（とくに日曜）。まずは時間が合いそうか、のぞいてみてください。<strong>卓が少ない時間帯を開拓してくれる人も大歓迎</strong>です。</p>
@@ -432,7 +432,7 @@ body.bg-static .illbg{background-position:center 50%}
 <h2 class="reveal">「レギュレーション」とは</h2>
 <p class="reveal">辺境TRPG村ならではの仕組みです。</p>
 <blockquote class="reveal"><p><strong>レギュレーション</strong> ＝ 同じシステムを「いろんなルール・目的」で遊ぶための、遊び方のパッケージ。</p></blockquote>
-<p class="reveal">ハクスラを楽しむ卓、シリアスな物語を紡ぐ卓、魔族として勇者を倒す卓、沈黙の氷原で開拓団として冒険する卓……とコンセプトの違う小世界がいくつもあり、気分で選べます。（いまのところ<strong>おもにアリアンロッドRPG2Eでの試み</strong>で、ソード・ワールドにも少し、サタスペにもごく一部。）下の解説動画（領民「てん」さん制作・<strong>内容はアリアンロッド中心</strong>）もどうぞ</p>
+<p class="reveal">ハクスラを楽しむ卓、シリアスな物語を紡ぐ卓、魔族として勇者を倒す卓、沈黙の氷原で開拓団として冒険する卓。コンセプトの違う小世界がいくつもあり、気分で選べます。（いまのところ<strong>おもにアリアンロッドRPG2Eでの試み</strong>で、ソード・ワールドにも少し、サタスペにもごく一部。）下の解説動画（領民「てん」さん制作・<strong>内容はアリアンロッド中心</strong>）もどうぞ。</p>
 <p class="reveal"><strong>【辺境TRPG村】レギュレーションって何？</strong> </p>
 <div class="vid reveal"><iframe src="https://www.youtube.com/embed/mytAr50pWGc" title="YouTube動画" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
 <hr>
@@ -446,7 +446,7 @@ body.bg-static .illbg{background-position:center 50%}
 </div>
 
 <p class="reveal">ロールによって、見られるチャンネルが段階的に開きます。</p>
-<ul class="reveal"><li><strong><span class="role role-tab">@旅人</span></strong>：入村ロール（<strong>参加時審査あり</strong>）。PLとして参加でき、多くのチャンネルが見えます。※審査については後述の「参加してからの流れ」へ。</li><li><strong><span class="role role-min">@領民</span></strong>：GMとして卓を立てる人のロール。申請のうえ管理メンバーの協議で決まります（自動付与ではありません）。卓・チャンネルの作成権を持ちます。</li><li><strong><span class="role role-kni">@騎士</span></strong>・<strong><span class="role role-exe">@執政官</span></strong>：サーバーの管理者（運営）です。村の治安と秩序を預かり、法と秩序に則って対応します。</li><li><strong> 亀Bot（リアクションロール）</strong>：遊びたいシステムの募集通知を受け取りたい人だけがボタンを押してロールを取得。<strong>「通知が欲しい人／欲しくない人」を同じ村で共存させる</strong>ための仕組みです。</li></ul>
+<ul class="reveal"><li><strong><span class="role role-tab">@旅人</span></strong>：入村ロール（<strong>参加時審査あり</strong>）。PLとして参加でき、多くのチャンネルが見えます。※審査については後述の「参加してからの流れ」へ。</li><li><strong><span class="role role-min">@領民</span></strong>：GMとして卓を立てる人のロール。申請のうえ管理メンバーの協議で決まります（自動付与ではありません）。卓・チャンネルの作成権を持ちます。</li><li><strong><span class="role role-kni">@騎士</span></strong>・<strong><span class="role role-exe">@執政官</span></strong>：サーバーの管理者（運営）です。村の治安を預かり、法と秩序に則って対応します。</li><li><strong> 亀Bot（リアクションロール）</strong>：遊びたいシステムの募集通知を受け取りたい人だけがボタンを押してロールを取得。<strong>「通知が欲しい人／欲しくない人」を同じ村で共存させる</strong>ための仕組みです。</li></ul>
 <blockquote class="reveal"><p><strong>ざっくり言うと</strong>：旅人はPLとして卓に参加する人、領民はGMとして卓を立てる人。騎士と執政官は、サーバーを運営する人たちです。亀Botは「通知がほしい人だけ」のスイッチ。旅人から執政官へと、見られる場所が少しずつ広がります。</p></blockquote>
 <hr>
 <h2 class="reveal">村のルール</h2>
@@ -880,10 +880,13 @@ body.bg-static .illbg{background-position:center 50%}
  function revealIn(root){(root||document).querySelectorAll(".reveal").forEach(function(el){el.classList.add("on")})}
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}})},{threshold:.10});
  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
- // スクロール連動の背景（--sy）＋進捗バー
+ // スクロール連動（背景の縦パン --sp ＋進捗バー）＝rAFループで毎フレームscrollYを読む（モバイル慣性でも滑らか・ガクつき防止）
  var bd=document.body, pbar=document.querySelector(".progress i");
- function onScroll(){var st=window.scrollY||window.pageYOffset||0;var h=document.documentElement.scrollHeight-window.innerHeight;var r=h>0?st/h:0;bd.style.setProperty("--sy",st);bd.style.setProperty("--sp",r.toFixed(4));if(pbar){pbar.style.width=(r*100).toFixed(2)+"%"}}
- window.addEventListener("scroll",onScroll,{passive:true}); window.addEventListener("resize",onScroll,{passive:true}); onScroll();
+ var maxH=0, lastY=-1;
+ function recalc(){maxH=document.documentElement.scrollHeight-window.innerHeight;lastY=-1;}
+ function tick(){var st=window.scrollY||window.pageYOffset||0;if(st!==lastY){lastY=st;var r=maxH>0?st/maxH:0;bd.style.setProperty("--sy",st);bd.style.setProperty("--sp",r.toFixed(4));if(pbar){pbar.style.width=(r*100).toFixed(2)+"%"}}requestAnimationFrame(tick)}
+ recalc(); requestAnimationFrame(tick);
+ window.addEventListener("resize",recalc,{passive:true});
  // ヒーローの光の粒
  var mt=document.querySelector(".hero .motes");
  if(mt){for(var i=0;i<16;i++){var bb=document.createElement("b"),s=4+Math.random()*6;bb.style.left=(Math.random()*100)+"%";bb.style.width=bb.style.height=s+"px";bb.style.animationDuration=(6+Math.random()*8)+"s";bb.style.animationDelay=(-Math.random()*10)+"s";mt.appendChild(bb)}}
