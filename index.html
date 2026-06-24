@@ -31,6 +31,8 @@
   --scr-bg:#f7eed9; --scr-bg2:#efe1c4; --scr-ln:#cdb487; --scr-ink:#5a4a30;
   /* 卓数ヒートマップ（強度で濃淡・テーマ追従） */
   --heat-rgb:38,110,170;
+  /* 5シーン背景の最大不透明度（可読性のため低め） */
+  --bg-max:.30;
 }
 [data-theme=dark]{
   --bg:#1a1b1e; --tx:#dadce0; --card:#26282c;
@@ -44,6 +46,7 @@
   --tab-bg:#2c2e33; --tab-ink:#9aa0a8; --tab-on:#fff; --tab-on-bg:#c2683f;
   --scr-bg:#2b2823; --scr-bg2:#332e26; --scr-ln:#5c4f38; --scr-ink:#e3d3ad;
   --heat-rgb:96,172,230;
+  --bg-max:.22;
 }
 
 /* ---- 2. ベース ------------------------------------------- */
@@ -336,11 +339,10 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 @media (prefers-reduced-motion:reduce){.fog span{animation:none}}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
-.illbg{position:fixed;inset:0;z-index:-1;background-repeat:no-repeat;background-size:130% auto;
-  background-position:center calc(var(--sy,0) * -0.2px);
-  filter:blur(3.5px);opacity:.30;will-change:background-position}
-[data-theme=dark] .illbg{opacity:.20}
-body.bg-static .illbg{background-position:center}
+.illbg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.illbg-l{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(3px);
+  opacity:var(--op,0);-webkit-mask-image:var(--mask,none);mask-image:var(--mask,none);
+  -webkit-mask-size:cover;mask-size:cover;will-change:opacity}
 .bg-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 
 /* ---- 12b. いつ卓が立つ？（結論3段＋週リズム・不透明カード・テーマ追従） ---- */
@@ -371,7 +373,7 @@ body.bg-static .illbg{background-position:center}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
 @media(max-width:560px){.controls{top:auto;bottom:14px;right:14px}}
 
-@media (prefers-reduced-motion:reduce){.illbg{background-position:center}}
+@media (prefers-reduced-motion:reduce){.illbg-l{-webkit-mask-image:none!important;mask-image:none!important}}
 
 /* 29. 物語：少女のセリフ(.say)を地の文(亀)と視覚的に区別 */
 /*   亀＝明朝の地の文／少女＝丸ゴシック＋緑の縦線＋淡い色地で"明るい声"を演出 */
@@ -382,9 +384,9 @@ body.bg-static .illbg{background-position:center}
 
 /* 30. BGM音量つまみ */
 .bgm-vol{width:74px;vertical-align:middle;accent-color:var(--lk);cursor:pointer}
-.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}.illbg{background-image:url(img/scroll_pano_v.jpg)}</style></head><body>
+.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}</style></head><body>
 <div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div>
-<div class="illbg"></div>
+<div class="illbg" id="sceneBg"></div>
 <div class="fog"><span></span><span></span><span></span></div>
 <div class="controls"><button class="theme-btn" onclick="toggleTheme()">ダークモード</button><button class="bg-btn" id="bgMotionBtn" aria-pressed="false">背景の動き：オン</button><button class="bgm-btn" id="bgmBtn" aria-label="BGMの再生/停止">BGM：オフ</button><input type="range" id="bgmVol" class="bgm-vol" min="0" max="100" value="35" aria-label="音量" title="音量"><audio id="bgm" loop preload="none" src="bgm.mp3"></audio></div>
 <nav class="toc"><div class="toc-h">目次</div><ul></ul></nav>
@@ -999,11 +1001,26 @@ body.bg-static .illbg{background-position:center}
  function revealIn(root){(root||document).querySelectorAll(".reveal").forEach(function(el){el.classList.add("on")})}
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}})},{threshold:.10});
  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
- // スクロール連動（背景の縦パン --sp ＋進捗バー）＝rAFループで毎フレームscrollYを読む（モバイル慣性でも滑らか・ガクつき防止）
+ // スクロール連動（5シーン背景クロスフェード ＋進捗バー）＝rAFループで毎フレームscrollY（モバイル慣性も滑らか）
  var bd=document.body, pbar=document.querySelector(".progress i");
+ // 5シーン背景レイヤーをfixedで重ねる（--spでopacityを山なりにクロスフェード＋斜めmask）
+ var SCENES=["scene1.jpg","scene2.jpg","scene3.jpg","scene4.jpg","scene5.jpg"];
+ var sceneBg=document.getElementById("sceneBg"), sceneLayers=[];
+ if(sceneBg){for(var si=0;si<SCENES.length;si++){var L=document.createElement("div");L.className="illbg-l";L.style.backgroundImage="url(img/"+SCENES[si]+")";sceneBg.appendChild(L);sceneLayers.push(L)}}
+ var sceneN=sceneLayers.length, curSp=0;
+ function bgMax(){return parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bg-max"))||0.26}
+ function paintScenes(sp){
+  if(!sceneN)return; curSp=sp;
+  var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var stat=document.body.classList.contains("bg-static")||reduced, mx=bgMax();
+  if(stat){for(var i=0;i<sceneN;i++){sceneLayers[i].style.setProperty("--op",i===0?mx:0);sceneLayers[i].style.removeProperty("--mask")}return}
+  var p=Math.max(0,Math.min(1,sp))*(sceneN-1), from=Math.floor(p), t=p-from, to=Math.min(from+1,sceneN-1);
+  for(var i=0;i<sceneN;i++){var d=Math.abs(p-i);sceneLayers[i].style.setProperty("--op",(Math.max(0,1-d)*mx).toFixed(3));sceneLayers[i].style.removeProperty("--mask")}
+  if(to!==from&&t>0.04&&t<0.96){var a=Math.round(t*100);sceneLayers[to].style.setProperty("--mask","linear-gradient(135deg,#000 "+a+"%,transparent "+(a+22)+"%)")}
+ }
  var maxH=0, lastY=-1;
  function recalc(){maxH=document.documentElement.scrollHeight-window.innerHeight;lastY=-1;}
- function tick(){var st=window.scrollY||window.pageYOffset||0;if(st!==lastY){lastY=st;var r=maxH>0?st/maxH:0;bd.style.setProperty("--sy",st);bd.style.setProperty("--sp",r.toFixed(4));if(pbar){pbar.style.width=(r*100).toFixed(2)+"%"}}requestAnimationFrame(tick)}
+ function tick(){var st=window.scrollY||window.pageYOffset||0;if(st!==lastY){lastY=st;var r=maxH>0?st/maxH:0;bd.style.setProperty("--sy",st);bd.style.setProperty("--sp",r.toFixed(4));if(pbar){pbar.style.width=(r*100).toFixed(2)+"%"}paintScenes(r)}requestAnimationFrame(tick)}
  recalc(); requestAnimationFrame(tick);
  window.addEventListener("resize",recalc,{passive:true});
  // ヒーローの光の粒
@@ -1046,7 +1063,7 @@ body.bg-static .illbg{background-position:center}
  var bgBtn=document.getElementById("bgMotionBtn");
  var prefersReduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
  var savedMotion=null;try{savedMotion=localStorage.getItem("bgmotion")}catch(e){}
- function applyMotion(off){document.body.classList.toggle("bg-static",off);if(bgBtn){bgBtn.textContent="背景の動き："+(off?"オフ":"オン");bgBtn.setAttribute("aria-pressed",String(off))}try{localStorage.setItem("bgmotion",off?"off":"on")}catch(e){}}
+ function applyMotion(off){document.body.classList.toggle("bg-static",off);if(bgBtn){bgBtn.textContent="背景の動き："+(off?"オフ":"オン");bgBtn.setAttribute("aria-pressed",String(off))}try{localStorage.setItem("bgmotion",off?"off":"on")}catch(e){}if(typeof paintScenes==="function")paintScenes(curSp);}
  applyMotion(savedMotion?savedMotion==="off":!!prefersReduce);
  if(bgBtn){bgBtn.addEventListener("click",function(){applyMotion(!document.body.classList.contains("bg-static"))})}
 })();
