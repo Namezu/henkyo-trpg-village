@@ -339,9 +339,9 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
 .illbg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.illbg-l{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(3px);
+.illbg-l{position:absolute;inset:0;background-size:auto 150%;background-position:center calc(50% + var(--ty,0px));filter:blur(3px);
   opacity:var(--op,0);-webkit-mask-image:var(--mask,none);mask-image:var(--mask,none);
-  -webkit-mask-size:cover;mask-size:cover;will-change:opacity}
+  -webkit-mask-size:cover;mask-size:cover;will-change:opacity,background-position}
 .bg-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 
 /* ---- 12b. いつ卓が立つ？（結論3段＋週リズム・不透明カード・テーマ追従） ---- */
@@ -1013,9 +1013,13 @@ h2.reveal:not(.on){transform:translateX(-26px)}
   if(!sceneN)return; curSp=sp;
   var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var stat=document.body.classList.contains("bg-static")||reduced, mx=bgMax();
-  if(stat){for(var i=0;i<sceneN;i++){sceneLayers[i].style.setProperty("--op",i===0?mx:0);sceneLayers[i].style.removeProperty("--mask")}return}
+  if(stat){for(var i=0;i<sceneN;i++){var Ls=sceneLayers[i];Ls.style.setProperty("--op",i===0?mx:0);Ls.style.setProperty("--ty","0px");Ls.style.removeProperty("--mask")}return}
   var p=Math.max(0,Math.min(1,sp))*(sceneN-1), from=Math.floor(p), t=p-from, to=Math.min(from+1,sceneN-1);
-  for(var i=0;i<sceneN;i++){var d=Math.abs(p-i);sceneLayers[i].style.setProperty("--op",(Math.max(0,1-d)*mx).toFixed(3));sceneLayers[i].style.removeProperty("--mask")}
+  var rng=(window.innerHeight||700)*0.18;  // 各シーンの区間内での縦パララックス量
+  for(var i=0;i<sceneN;i++){var L=sceneLayers[i],d=Math.abs(p-i);
+   L.style.setProperty("--op",(Math.max(0,1-d)*mx).toFixed(3));
+   L.style.setProperty("--ty",((i-p)*rng).toFixed(0)+"px");  // スクロールと同方向に流れる（中心0・前後で移動）
+   L.style.removeProperty("--mask")}
   if(to!==from&&t>0.04&&t<0.96){var a=Math.round(t*100);sceneLayers[to].style.setProperty("--mask","linear-gradient(135deg,#000 "+a+"%,transparent "+(a+22)+"%)")}
  }
  var maxH=0, lastY=-1;
