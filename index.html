@@ -235,7 +235,7 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 [data-theme=dark] .cine{box-shadow:inset 0 0 190px rgba(0,0,0,.5)}
 
 /* ---- 19. 没入ヒーロー：光の粒・入場・スクロール誘導 ---- */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .hero>*{position:relative;z-index:1}
 .hero .motes{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .hero .motes b{position:absolute;bottom:-12px;border-radius:50%;background:rgba(255,255,255,.7);filter:blur(1px);animation:floatUp linear infinite}
@@ -255,6 +255,23 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 .hero[data-entered="plain"] .enter-choice,.hero[data-entered="story"] .enter-choice,
 .hero[data-entered="plain"] .sub,.hero[data-entered="story"] .sub{display:none}
 @media(max-width:560px){.hero .enter-choice{gap:10px}.enter-btn{padding:12px 24px;font-size:1em}}
+/* === 入場演出（霧散＋ブラー＋ズームイン→明けてスクロールサイトへ） === */
+.hero .hero-logo,.hero .hero-title,.hero .sub,.hero .enter-choice{transition:opacity .55s ease,filter .55s ease,transform .7s ease}
+#sceneBg{transition:transform .8s ease-in,filter .8s ease-in}
+body.is-entering #sceneBg{transform:scale(1.12);filter:blur(14px)}
+body.is-entering .hero .hero-logo,body.is-entering .hero .hero-title,body.is-entering .hero .sub,body.is-entering .hero .enter-choice{opacity:0;filter:blur(12px);transform:scale(1.07)}
+body.is-entering .enter-btn{pointer-events:none}
+.enter-veil{position:fixed;inset:0;z-index:55;opacity:0;pointer-events:none;transition:opacity .5s ease;background:rgba(244,240,232,.92)}
+[data-theme=dark] .enter-veil{background:rgba(9,13,21,.92)}
+body.is-entering .enter-veil{opacity:1}
+/* 入場前/演出中は固定タブを隠す（カバーの選択ボタンと重複させない） */
+body:not(.is-entered) .tabs{display:none}
+/* 入場後はヒーローをコンパクトな見出しに（全画面カバーを残さない） */
+body.is-entered .hero{min-height:auto;padding:56px 20px 42px}
+@media (prefers-reduced-motion:reduce){
+ body.is-entering #sceneBg{transform:none;filter:none}
+ body.is-entering .hero .hero-logo,body.is-entering .hero .hero-title,body.is-entering .hero .sub,body.is-entering .hero .enter-choice{filter:none;transform:none}
+}
 @keyframes heroRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 .hero .cue{position:absolute;bottom:16px;left:50%;color:#fff;opacity:.85;font-size:1.3em;text-decoration:none;text-shadow:0 1px 6px rgba(0,0,0,.3);animation:bob 1.8s ease-in-out infinite;z-index:2}
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
@@ -402,7 +419,7 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
 /* 30. BGM音量つまみ */
 .bgm-vol{width:74px;vertical-align:middle;accent-color:var(--lk);cursor:pointer}
 .hero{background:linear-gradient(180deg,rgba(12,18,30,.34),rgba(10,15,26,.60));animation:none}[data-theme=dark] .hero{background:linear-gradient(180deg,rgba(6,10,18,.30),rgba(6,10,18,.58))}</style></head><body>
-<div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div>
+<div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div><div class="enter-veil"></div>
 <div class="illbg" id="sceneBg"></div>
 <div class="fog"><span></span><span></span><span></span></div>
 <div class="controls"><button class="theme-btn" onclick="toggleTheme()">ダークモード</button><button class="bgm-btn" id="bgmBtn" aria-label="BGMの再生/停止">BGM：オフ</button><input type="range" id="bgmVol" class="bgm-vol" min="0" max="100" value="35" aria-label="音量" title="音量"><audio id="bgm" loop preload="none" src="bgm.mp3"></audio></div>
@@ -1096,18 +1113,30 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   setJourney(name==="story"?SCENES_STORY:SCENES_PLAIN);   // 物語=9枚 / ふつう=5枚（長さで再計算）
   try{localStorage.setItem("tab",name)}catch(e){}
  }
- // 入場＝モードを選んでヒーロー見出しを切替＋(タイトル付近なら)本文へすっと送り込む
  function lockCover(on){document.documentElement.classList.toggle("cover-locked",on);document.body.classList.toggle("cover-locked",on)}
- function enter(name){
-  applyPanel(name);
-  var hero=document.querySelector(".hero"), ht=document.querySelector(".hero-title");
-  if(hero)hero.setAttribute("data-entered",name);
+ function setHeading(name){
+  var ht=document.querySelector(".hero-title");
   if(ht)ht.innerHTML=name==="story"?'辺境TRPG村<span class="ht-sub">── 記憶をなくした俺の、ある長い一日</span>':"辺境TRPG村へようこそ";
-  lockCover(false);   // 入場＝スクロールロック解除
+  var hero=document.querySelector(".hero"); if(hero)hero.setAttribute("data-entered",name);
  }
- document.querySelectorAll(".tab-btn").forEach(function(b){b.addEventListener("click",function(){enter(b.dataset.tab)})});
- document.querySelectorAll(".enter-btn").forEach(function(b){b.addEventListener("click",function(){enter(b.dataset.go)})});
- var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}applyPanel(t);  // 初期＝カバーのまま本文だけ用意（入場はユーザーの選択）
+ // 初回入場＝既存のテキスト＋背景を霧散させつつブラー強め＋ズームイン→明けてスクロールサイトへ（初回のみ）
+ function introEnter(name){
+  var b=document.body; if(b.classList.contains("is-entering")||b.classList.contains("is-entered"))return;
+  document.querySelectorAll(".enter-btn").forEach(function(x){x.disabled=true});
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  applyPanel(name);                 // 裏で本文＆背景シーンを用意（霧ベールの下）
+  b.classList.add("is-entering");
+  setTimeout(function(){            // ズームが明ける瞬間
+   setHeading(name);
+   b.classList.remove("is-entering"); b.classList.add("is-entered");
+   lockCover(false); window.scrollTo(0,0); recalc(); paintScenes(0);
+  }, reduce?150:780);
+ }
+ // 入場後のモード切替（演出なし＝固定タブから）
+ function switchMode(name){applyPanel(name); setHeading(name)}
+ document.querySelectorAll(".enter-btn").forEach(function(b){b.addEventListener("click",function(){introEnter(b.dataset.go)})});
+ document.querySelectorAll(".tab-btn").forEach(function(b){b.addEventListener("click",function(){switchMode(b.dataset.tab)})});
+ var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}applyPanel(t);  // 初期＝カバー（本文は裏で用意・固定タブは入場まで非表示）
  lockCover(true);    // タイトル画面はスクロールロック（ふつう/物語を選ぶまで）
  // BGM（初期は停止・クリックで再生/停止）
  var ab=document.getElementById("bgm"), bb=document.getElementById("bgmBtn"), vol=document.getElementById("bgmVol");
