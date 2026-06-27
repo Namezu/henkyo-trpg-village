@@ -351,6 +351,8 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 @media (prefers-reduced-motion:reduce){.fog span{animation:none}}
 
 /* 27. スクロール背景＝少しボケた村イラストがゆっくり流れる（パララックス） */
+/* タイトル画面のスクロールロック（ふつう/物語を選ぶまで） */
+html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;overscroll-behavior:none}
 .illbg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .illbg-l{position:absolute;inset:0;background-size:auto 150%;background-position:center calc(50% + var(--ty,0px));filter:blur(3px);
   opacity:var(--op,0);-webkit-mask-image:var(--mask,none);mask-image:var(--mask,none);
@@ -1042,21 +1044,21 @@ h2.reveal:not(.on){transform:translateX(-26px)}
   var vh=window.innerHeight||700, st=window.scrollY||window.pageYOffset||0;
   // シーン0(夜景)＝最初の1画面でフェード（総ページ長に依存させない＝本文に夜景が居残らない）
   if(heroLayer){
-   var heroFade=stat?1:Math.max(0,Math.min(1,1-st/(vh*0.85)));
+   var heroFade=stat?1:Math.max(0,Math.min(1,1-st/(vh*0.6)));   // 最初の1画面弱で素早く消す＝痕跡を残さない
    heroLayer.style.setProperty("--op",(heroFade*HERO_MAX).toFixed(3));
-   heroLayer.style.setProperty("--ty",stat?"0px":(st*0.10).toFixed(0)+"px");   // フェード中に軽く下へドリフト＝カメラが引く感じ
+   heroLayer.style.setProperty("--ty","0px");
    heroLayer.style.removeProperty("--mask");
   }
   var jN=journeyLayers.length; if(!jN)return;
   if(stat){for(var s=0;s<jN;s++){journeyLayers[s].style.setProperty("--op",s===0?mx:0);journeyLayers[s].style.setProperty("--ty","0px");journeyLayers[s].style.removeProperty("--mask")}return}
-  // 旅シーン群＝spを枚数にマップしてクロスフェード＋斜めmask
-  var p=Math.max(0,Math.min(1,sp))*(jN-1), from=Math.floor(p), t=p-from, to=Math.min(from+1,jN-1);
-  var rng=vh*0.18;  // 各シーンの区間内での縦パララックス量
-  for(var i=0;i<jN;i++){var L=journeyLayers[i],d=Math.abs(p-i);
-   L.style.setProperty("--op",(Math.max(0,1-d)*mx).toFixed(3));
-   L.style.setProperty("--ty",((i-p)*rng).toFixed(0)+"px");
-   L.style.removeProperty("--mask")}
-  if(to!==from&&t>0.04&&t<0.96){var a=Math.round(t*100);journeyLayers[to].style.setProperty("--mask","linear-gradient(135deg,#000 "+a+"%,transparent "+(a+22)+"%)")}
+  // 旅シーン群＝各シーンをしっかり"保持"し、区間の終わりだけで素早くクロスフェード＝前のシーンの痕跡を残さない明快なシーンチェンジ
+  var p=Math.max(0,Math.min(1,sp))*(jN-1), cur=Math.floor(p), f=p-cur, nxt=Math.min(cur+1,jN-1);
+  var FADE=0.24;                            // 区間末のこの幅だけで切替（手前は1枚だけを保持＝重ならない）
+  var tn=f<=(1-FADE)?0:(f-(1-FADE))/FADE;   // 0→1：次シーンへの遷移量
+  tn=tn*tn*(3-2*tn);                        // smoothstep＝境目だけキレよく(ease-in-out)・残留を最小化
+  for(var i=0;i<jN;i++){var L=journeyLayers[i];L.style.setProperty("--op","0");L.style.setProperty("--ty","0px");L.style.removeProperty("--mask")}
+  journeyLayers[cur].style.setProperty("--op",((1-tn)*mx).toFixed(3));
+  if(nxt!==cur)journeyLayers[nxt].style.setProperty("--op",(tn*mx).toFixed(3));
  }
  var maxH=0, lastY=-1;
  function recalc(){maxH=document.documentElement.scrollHeight-window.innerHeight;lastY=-1;}
@@ -1095,17 +1097,18 @@ h2.reveal:not(.on){transform:translateX(-26px)}
   try{localStorage.setItem("tab",name)}catch(e){}
  }
  // 入場＝モードを選んでヒーロー見出しを切替＋(タイトル付近なら)本文へすっと送り込む
+ function lockCover(on){document.documentElement.classList.toggle("cover-locked",on);document.body.classList.toggle("cover-locked",on)}
  function enter(name){
   applyPanel(name);
   var hero=document.querySelector(".hero"), ht=document.querySelector(".hero-title");
   if(hero)hero.setAttribute("data-entered",name);
   if(ht)ht.innerHTML=name==="story"?'辺境TRPG村<span class="ht-sub">── 記憶をなくした俺の、ある長い一日</span>':"辺境TRPG村へようこそ";
-  var vh=window.innerHeight||700;
-  if((window.scrollY||window.pageYOffset||0)<vh*0.5){var tb=document.getElementById("tabs");if(tb)setTimeout(function(){tb.scrollIntoView({behavior:"smooth",block:"start"})},140)}
+  lockCover(false);   // 入場＝スクロールロック解除
  }
  document.querySelectorAll(".tab-btn").forEach(function(b){b.addEventListener("click",function(){enter(b.dataset.tab)})});
  document.querySelectorAll(".enter-btn").forEach(function(b){b.addEventListener("click",function(){enter(b.dataset.go)})});
  var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}applyPanel(t);  // 初期＝カバーのまま本文だけ用意（入場はユーザーの選択）
+ lockCover(true);    // タイトル画面はスクロールロック（ふつう/物語を選ぶまで）
  // BGM（初期は停止・クリックで再生/停止）
  var ab=document.getElementById("bgm"), bb=document.getElementById("bgmBtn"), vol=document.getElementById("bgmVol");
  if(ab&&vol){ab.volume=vol.value/100; vol.addEventListener("input",function(){ab.volume=vol.value/100})}
