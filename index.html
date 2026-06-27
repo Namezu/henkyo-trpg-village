@@ -241,8 +241,8 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 .hero .motes b{position:absolute;bottom:-12px;border-radius:50%;background:rgba(255,255,255,.7);filter:blur(1px);animation:floatUp linear infinite}
 @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0}12%{opacity:.85}100%{transform:translateY(-88vh) scale(.4);opacity:0}}
 .hero .hero-logo{display:block;width:min(210px,44vw);height:auto;margin:0 auto .15em;filter:drop-shadow(0 6px 18px rgba(0,0,0,.38))}
-.hero .hero-logo,.hero h1,.hero .sub,.hero .enter-lead,.hero .enter-choice,.hero .chips,.hero .cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) both}
-.hero h1{animation-delay:.10s}.hero .sub{animation-delay:.2s}.hero .enter-lead{animation-delay:.3s}.hero .enter-choice{animation-delay:.4s}.hero .chips{animation-delay:.3s}.hero .cta{animation-delay:.4s}
+.hero .hero-logo,.hero h1,.hero .sub,.hero .enter-lead,.hero .enter-choice,.hero .enter-hint,.hero .chips,.hero .cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.10s}.hero .sub{animation-delay:.2s}.hero .enter-lead{animation-delay:.3s}.hero .enter-choice{animation-delay:.4s}.hero .enter-hint{animation-delay:.5s}.hero .chips{animation-delay:.3s}.hero .cta{animation-delay:.4s}
 /* ゲートのリード文＝飾り罫つきの問いかけ（クリックで紹介サイトへ） */
 .hero .enter-lead{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:1.7em;font-family:'Shippori Mincho','Yu Mincho',serif;font-size:1.12em;font-weight:700;letter-spacing:.07em;opacity:.95}
 .hero .enter-lead::before,.hero .enter-lead::after{content:"";height:1px;width:40px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55))}
@@ -250,29 +250,33 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 @media(max-width:560px){.hero .hero-logo{width:40vw}}
 /* タイトル画面の選択ボタン（ガラス調・夜景に重ねる） */
 .hero .hero-title .ht-sub{display:block;font-size:.42em;margin-top:.55em;font-weight:500;opacity:.94;letter-spacing:.05em;line-height:1.55}
-.hero .enter-choice{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:1.5em}
-.enter-btn{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:'Shippori Mincho','Yu Mincho',serif;padding:15px 34px;border-radius:18px;
+.hero .enter-choice{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:stretch;margin-top:1.5em}
+.enter-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:170px;font-family:'Shippori Mincho','Yu Mincho',serif;padding:15px 30px;border-radius:18px;
   border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;cursor:pointer;
   -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);box-shadow:0 6px 22px rgba(0,0,0,.25);transition:background .25s,transform .25s,box-shadow .25s,border-color .25s}
 .enter-btn:hover{background:rgba(255,255,255,.24);transform:translateY(-3px);border-color:rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.34)}
-.enter-btn .eb-main{font-size:1.08em;font-weight:700;letter-spacing:.08em}
+.enter-btn .eb-main{font-size:1.1em;font-weight:700;letter-spacing:.08em}
 .enter-btn .eb-sub{font-size:.72em;font-weight:500;letter-spacing:.05em;opacity:.82}
+.enter-btn .eb-arrow{font-size:.95em;opacity:.7;margin-top:2px;transition:transform .25s,opacity .25s}
+.enter-btn:hover .eb-arrow{opacity:1;transform:translateX(4px)}
+.hero .enter-hint{margin-top:1.1em;font-size:.82em;opacity:.72;letter-spacing:.04em}
 /* 入場後はボタンと一言を隠す（見出しが入場後の文言に切り替わる） */
 .hero[data-entered="plain"] .enter-choice,.hero[data-entered="story"] .enter-choice,
 .hero[data-entered="plain"] .enter-lead,.hero[data-entered="story"] .enter-lead,
+.hero[data-entered="plain"] .enter-hint,.hero[data-entered="story"] .enter-hint,
 .hero[data-entered="plain"] .sub,.hero[data-entered="story"] .sub{display:none}
 @media(max-width:560px){.hero .enter-choice{gap:10px}.enter-btn{padding:12px 24px;font-size:1em}}
 /* === 入場演出（霧散＋ブラー＋ズームイン→明けてスクロールサイトへ） === */
-.hero .hero-logo,.hero .hero-title,.hero .sub,.hero .enter-lead,.hero .enter-choice{transition:opacity .55s ease,filter .55s ease,transform .7s ease}
+.hero .hero-logo,.hero .hero-title,.hero .sub,.hero .enter-lead,.hero .enter-choice,.hero .enter-hint{transition:opacity .55s ease,filter .55s ease,transform .7s ease}
 #sceneBg{transition:transform .8s ease-in,filter .8s ease-in}
 body.is-entering #sceneBg{transform:scale(1.12);filter:blur(14px)}
-body.is-entering .hero .hero-logo,body.is-entering .hero .hero-title,body.is-entering .hero .sub,body.is-entering .hero .enter-lead,body.is-entering .hero .enter-choice{opacity:0;filter:blur(12px);transform:scale(1.07)}
+body.is-entering .hero .hero-logo,body.is-entering .hero .hero-title,body.is-entering .hero .sub,body.is-entering .hero .enter-lead,body.is-entering .hero .enter-choice,body.is-entering .hero .enter-hint{opacity:0;filter:blur(12px);transform:scale(1.07)}
 body.is-entering .enter-btn{pointer-events:none}
 .enter-veil{position:fixed;inset:0;z-index:55;opacity:0;pointer-events:none;transition:opacity .5s ease;background:rgba(244,240,232,.92)}
 [data-theme=dark] .enter-veil{background:rgba(9,13,21,.92)}
 body.is-entering .enter-veil{opacity:1}
-/* 旧・本文内タブバーは廃止（切替は右上のモードボタンで） */
-.tabs{display:none}
+/* 旧・本文内タブバーは廃止（切替は右上のモードボタンで）※後段の.tabs定義に勝つため!important */
+.tabs{display:none!important}
 /* 右上のモード切替ボタン（ライト/BGMと同じ列・今見ていない方だけ表示） */
 .mode-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .mode-btn[hidden]{display:none}
@@ -446,9 +450,10 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
  <div class="sub">ルールとマナーを守って、皆で楽しく。</div>
  <div class="enter-lead"><span>辺境TRPG村って、どんなところ？</span></div>
  <div class="enter-choice">
-  <button class="enter-btn" data-go="plain"><span class="eb-main">ふつうに紹介</span><span class="eb-sub">事実をまっすぐ</span></button>
-  <button class="enter-btn" data-go="story"><span class="eb-main">物語で紹介</span><span class="eb-sub">物語として読む</span></button>
+  <button class="enter-btn" data-go="plain"><span class="eb-main">ふつうに紹介</span><span class="eb-arrow">→</span></button>
+  <button class="enter-btn" data-go="story"><span class="eb-main">物語で紹介</span><span class="eb-sub">へんな紹介</span><span class="eb-arrow">→</span></button>
  </div>
+ <div class="enter-hint">クリックすると、それぞれの紹介ページが開きます</div>
 </div>
 
 <div class="wrap">
