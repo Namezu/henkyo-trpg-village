@@ -1106,12 +1106,14 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   var jN=journeyLayers.length; if(!jN)return;
   if(stat){for(var s=0;s<jN;s++){journeyLayers[s].style.setProperty("--op",s===0?mx:0);journeyLayers[s].style.setProperty("--ty","0px");journeyLayers[s].style.removeProperty("--mask")}return}
   // 旅シーン群＝各シーンがスクロールと一緒に上下にパララックス移動し、見切れる前(区間末)に素早くクロスフェードして次へ。動かすのは現在＋次の2枚だけ・前は即0で痕跡なし
-  var p=Math.max(0,Math.min(1,sp))*(jN-1), cur=Math.floor(p), f=p-cur, nxt=Math.min(cur+1,jN-1);
-  var FADE=0.74;                              // この点(区間内74%)から末尾26%だけでクロスフェード
-  var ft=f<=FADE?0:(f-FADE)/(1-FADE); ft=ft*ft*(3-2*ft);   // smoothstep
-  var A=vh*0.16;                              // パララックス移動量(背景150%ズームの余白0.25vhより小さく＝端を出さない)
+  // 各シーンに専用区間を与える＝jN分割(最後のシーンも自分のパララックス尺を持つ＝末尾で止まらない)
+  var p=Math.max(0,Math.min(1,sp))*jN, cur=Math.min(Math.floor(p),jN-1), f=p-cur, nxt=Math.min(cur+1,jN-1);
+  var last=(nxt===cur);                        // 最後のシーン＝フェード先が無い
+  var FADE=0.74;                               // この点(区間内74%)から末尾26%だけでクロスフェード
+  var ft=last?0:(f<=FADE?0:(f-FADE)/(1-FADE)); ft=ft*ft*(3-2*ft);   // smoothstep（最後はフェードしない）
+  var A=vh*0.16;                               // パララックス移動量(背景150%ズームの余白0.25vhより小さく＝端を出さない)
   for(var i=0;i<jN;i++){var L=journeyLayers[i],op=0,ty=0;
-   if(i===cur){op=1-ft; ty=A-2*A*f;}            // 現在：区間内でA→-Aへ縦移動(スクロール同方向)＋末で次へフェード
+   if(i===cur){op=1-ft; ty=A-2*A*f;}            // 現在：区間内でA→-Aへ縦移動(スクロール同方向)。最後のシーンはft=0でop維持＝最後までパララックス継続
    else if(i===nxt&&nxt!==cur){op=ft; ty=A;}    // 次：開始位置A(=次区間の先頭ty)で入る＝境界で連続しカクつかない
    L.style.setProperty("--op",(op*mx).toFixed(3));
    L.style.setProperty("--ty",ty.toFixed(1)+"px");
