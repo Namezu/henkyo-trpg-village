@@ -344,6 +344,9 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 .illbg-l{position:absolute;inset:0;background-size:auto 150%;background-position:center calc(50% + var(--ty,0px));filter:blur(3px);
   opacity:var(--op,0);-webkit-mask-image:var(--mask,none);mask-image:var(--mask,none);
   -webkit-mask-size:cover;mask-size:cover;will-change:opacity,background-position}
+/* シーン0＝夜景(ヒーロー)：くっきり寄り＋ゆっくりズーム(ケン・バーンズ)で映画的なコールドオープン */
+.illbg-l.s0{background-size:cover;filter:blur(1px);animation:heroKenburns 26s ease-out both;will-change:opacity,transform,background-position}
+@keyframes heroKenburns{from{transform:scale(1.05)}to{transform:scale(1.16)}}
 .bg-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 
 /* ---- 12b. いつ卓が立つ？（結論3段＋週リズム・不透明カード・テーマ追従） ---- */
@@ -374,7 +377,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
 @media(max-width:560px){.controls{top:auto;bottom:14px;right:14px}}
 
-@media (prefers-reduced-motion:reduce){.illbg-l{-webkit-mask-image:none!important;mask-image:none!important}}
+@media (prefers-reduced-motion:reduce){.illbg-l{-webkit-mask-image:none!important;mask-image:none!important}.illbg-l.s0{animation:none!important;transform:none!important}}
 
 /* 29. 物語：少女のセリフ(.say)を地の文(亀)と視覚的に区別 */
 /*   亀＝明朝の地の文／少女＝丸ゴシック＋緑の縦線＋淡い色地で"明るい声"を演出 */
@@ -385,7 +388,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 
 /* 30. BGM音量つまみ */
 .bgm-vol{width:74px;vertical-align:middle;accent-color:var(--lk);cursor:pointer}
-.hero{background-image:linear-gradient(180deg,rgba(16,24,36,.46),rgba(16,24,36,.66)),url(img/hero_bg.jpg);background-size:cover;background-position:center;animation:none}[data-theme=dark] .hero{background-image:linear-gradient(180deg,rgba(8,12,22,.40),rgba(8,12,22,.66)),url(img/hero_bg_night.jpg)}</style></head><body>
+.hero{background:linear-gradient(180deg,rgba(12,18,30,.34),rgba(10,15,26,.60));animation:none}[data-theme=dark] .hero{background:linear-gradient(180deg,rgba(6,10,18,.30),rgba(6,10,18,.58))}</style></head><body>
 <div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div>
 <div class="illbg" id="sceneBg"></div>
 <div class="fog"><span></span><span></span><span></span></div>
@@ -991,33 +994,49 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 <script>
 (function(){
  // テーマ
- function applyT(t){var d=document.documentElement;if(t==="dark"){d.setAttribute("data-theme","dark")}else{d.removeAttribute("data-theme")}var b=document.querySelector(".theme-btn");if(b){b.textContent=t==="dark"?"ライトモード":"ダークモード"}try{localStorage.setItem("th",t)}catch(e){}}
+ function applyT(t){var d=document.documentElement;if(t==="dark"){d.setAttribute("data-theme","dark")}else{d.removeAttribute("data-theme")}var b=document.querySelector(".theme-btn");if(b){b.textContent=t==="dark"?"ライトモード":"ダークモード"}try{localStorage.setItem("th",t)}catch(e){}if(window.__heroScene)window.__heroScene();}
  window.toggleTheme=function(){applyT(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark")};
  var saved="dark";try{saved=localStorage.getItem("th")||"dark"}catch(e){}applyT(saved);
  // 出現アニメ
  function revealIn(root){(root||document).querySelectorAll(".reveal").forEach(function(el){el.classList.add("on")})}
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}})},{threshold:.10});
  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
- // スクロール連動（5シーン背景クロスフェード ＋進捗バー）＝rAFループで毎フレームscrollY（モバイル慣性も滑らか）
+ // スクロール連動（夜景→旅シーン群の映画的シーンチェンジ ＋進捗バー）＝rAFループで毎フレームscrollY（モバイル慣性も滑らか）
  var bd=document.body, pbar=document.querySelector(".progress i");
- // 5シーン背景レイヤーをfixedで重ねる（--spでopacityを山なりにクロスフェード＋斜めmask）
- var SCENES=["scene1.jpg","scene2.jpg","scene3.jpg","scene4.jpg","scene5.jpg"];
+ // 背景レイヤーをfixedで重ねる：シーン0=夜景(ヒーロー)＝最初の1画面でフェード、以降=旅シーン群を--spでクロスフェード＋斜めmask
+ var HERO_DAY="hero_bg.jpg", HERO_NIGHT="hero_bg_night.jpg", HERO_MAX=0.97;
+ var JOURNEY=["scene1.jpg","scene2.jpg","scene3.jpg","scene4.jpg","scene5.jpg"];                         // 小麦畑→清流→通り→家屋→古城
+ var SCENES=[HERO_NIGHT].concat(JOURNEY);
  var sceneBg=document.getElementById("sceneBg"), sceneLayers=[];
- if(sceneBg){for(var si=0;si<SCENES.length;si++){var L=document.createElement("div");L.className="illbg-l";L.style.backgroundImage="url(img/"+SCENES[si]+")";sceneBg.appendChild(L);sceneLayers.push(L)}}
+ if(sceneBg){for(var si=0;si<SCENES.length;si++){var L=document.createElement("div");L.className=si===0?"illbg-l s0":"illbg-l";L.style.backgroundImage="url(img/"+SCENES[si]+")";sceneBg.appendChild(L);sceneLayers.push(L)}}
  var sceneN=sceneLayers.length, curSp=0;
+ // テーマでシーン0(夜景=ヒーロー)の昼夜を差し替え（applyTから呼ばれる）
+ window.__heroScene=function(){if(sceneLayers[0]){var dk=document.documentElement.getAttribute("data-theme")==="dark";sceneLayers[0].style.backgroundImage="url(img/"+(dk?HERO_NIGHT:HERO_DAY)+")"}};
+ window.__heroScene();
  function bgMax(){return parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bg-max"))||0.26}
  function paintScenes(sp){
   if(!sceneN)return; curSp=sp;
   var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var stat=document.body.classList.contains("bg-static")||reduced, mx=bgMax();
-  if(stat){for(var i=0;i<sceneN;i++){var Ls=sceneLayers[i];Ls.style.setProperty("--op",i===0?mx:0);Ls.style.setProperty("--ty","0px");Ls.style.removeProperty("--mask")}return}
-  var p=Math.max(0,Math.min(1,sp))*(sceneN-1), from=Math.floor(p), t=p-from, to=Math.min(from+1,sceneN-1);
-  var rng=(window.innerHeight||700)*0.18;  // 各シーンの区間内での縦パララックス量
-  for(var i=0;i<sceneN;i++){var L=sceneLayers[i],d=Math.abs(p-i);
+  var vh=window.innerHeight||700, st=window.scrollY||window.pageYOffset||0;
+  // シーン0(夜景)＝最初の1画面でフェード（総ページ長に依存させない＝本文に夜景が居残らない）
+  var heroFade=Math.max(0,Math.min(1,1-st/(vh*0.85)));
+  if(stat){
+   sceneLayers[0].style.setProperty("--op",HERO_MAX);sceneLayers[0].style.setProperty("--ty","0px");sceneLayers[0].style.removeProperty("--mask");
+   for(var i=1;i<sceneN;i++){var Ls=sceneLayers[i];Ls.style.setProperty("--op",i===1?mx:0);Ls.style.setProperty("--ty","0px");Ls.style.removeProperty("--mask")}return;
+  }
+  sceneLayers[0].style.setProperty("--op",(heroFade*HERO_MAX).toFixed(3));
+  sceneLayers[0].style.setProperty("--ty",(st*0.10).toFixed(0)+"px");   // フェード中に軽く下へドリフト＝カメラが引く感じ
+  sceneLayers[0].style.removeProperty("--mask");
+  // 旅シーン群(1..N-1)＝spを旅シーン数にマップしてクロスフェード＋斜めmask
+  var jN=sceneN-1; if(jN<1)return;
+  var p=Math.max(0,Math.min(1,sp))*(jN-1), from=Math.floor(p), t=p-from, to=Math.min(from+1,jN-1);
+  var rng=vh*0.18;  // 各シーンの区間内での縦パララックス量
+  for(var i=1;i<sceneN;i++){var L=sceneLayers[i],j=i-1,d=Math.abs(p-j);
    L.style.setProperty("--op",(Math.max(0,1-d)*mx).toFixed(3));
-   L.style.setProperty("--ty",((i-p)*rng).toFixed(0)+"px");  // スクロールと同方向に流れる（中心0・前後で移動）
+   L.style.setProperty("--ty",((j-p)*rng).toFixed(0)+"px");
    L.style.removeProperty("--mask")}
-  if(to!==from&&t>0.04&&t<0.96){var a=Math.round(t*100);sceneLayers[to].style.setProperty("--mask","linear-gradient(135deg,#000 "+a+"%,transparent "+(a+22)+"%)")}
+  if(to!==from&&t>0.04&&t<0.96){var a=Math.round(t*100);sceneLayers[to+1].style.setProperty("--mask","linear-gradient(135deg,#000 "+a+"%,transparent "+(a+22)+"%)")}
  }
  var maxH=0, lastY=-1;
  function recalc(){maxH=document.documentElement.scrollHeight-window.innerHeight;lastY=-1;}
