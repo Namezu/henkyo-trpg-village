@@ -243,16 +243,20 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 .hero .hero-logo{display:block;width:min(210px,44vw);height:auto;margin:0 auto .15em;filter:drop-shadow(0 6px 18px rgba(0,0,0,.38))}
 .hero .hero-logo,.hero h1,.hero .sub,.hero .enter-lead,.hero .enter-choice,.hero .chips,.hero .cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) both}
 .hero h1{animation-delay:.10s}.hero .sub{animation-delay:.2s}.hero .enter-lead{animation-delay:.3s}.hero .enter-choice{animation-delay:.4s}.hero .chips{animation-delay:.3s}.hero .cta{animation-delay:.4s}
-/* ゲートのリード文（クリックで紹介サイトへ、を明示） */
-.hero .enter-lead{margin-top:1.4em;font-family:'Shippori Mincho','Yu Mincho',serif;font-size:1.16em;font-weight:700;letter-spacing:.05em;opacity:.96}
+/* ゲートのリード文＝飾り罫つきの問いかけ（クリックで紹介サイトへ） */
+.hero .enter-lead{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:1.7em;font-family:'Shippori Mincho','Yu Mincho',serif;font-size:1.12em;font-weight:700;letter-spacing:.07em;opacity:.95}
+.hero .enter-lead::before,.hero .enter-lead::after{content:"";height:1px;width:40px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55))}
+.hero .enter-lead::after{background:linear-gradient(90deg,rgba(255,255,255,.55),transparent)}
 @media(max-width:560px){.hero .hero-logo{width:40vw}}
 /* タイトル画面の選択ボタン（ガラス調・夜景に重ねる） */
 .hero .hero-title .ht-sub{display:block;font-size:.42em;margin-top:.55em;font-weight:500;opacity:.94;letter-spacing:.05em;line-height:1.55}
 .hero .enter-choice{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:1.5em}
-.enter-btn{font-family:'Shippori Mincho','Yu Mincho',serif;font-size:1.06em;letter-spacing:.06em;padding:14px 32px;border-radius:30px;
-  border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.13);color:#fff;cursor:pointer;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 6px 22px rgba(0,0,0,.25);transition:background .25s,transform .25s,box-shadow .25s}
-.enter-btn:hover{background:rgba(255,255,255,.26);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.32)}
+.enter-btn{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:'Shippori Mincho','Yu Mincho',serif;padding:15px 34px;border-radius:18px;
+  border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;cursor:pointer;
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);box-shadow:0 6px 22px rgba(0,0,0,.25);transition:background .25s,transform .25s,box-shadow .25s,border-color .25s}
+.enter-btn:hover{background:rgba(255,255,255,.24);transform:translateY(-3px);border-color:rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.34)}
+.enter-btn .eb-main{font-size:1.08em;font-weight:700;letter-spacing:.08em}
+.enter-btn .eb-sub{font-size:.72em;font-weight:500;letter-spacing:.05em;opacity:.82}
 /* 入場後はボタンと一言を隠す（見出しが入場後の文言に切り替わる） */
 .hero[data-entered="plain"] .enter-choice,.hero[data-entered="story"] .enter-choice,
 .hero[data-entered="plain"] .enter-lead,.hero[data-entered="story"] .enter-lead,
@@ -267,13 +271,17 @@ body.is-entering .enter-btn{pointer-events:none}
 .enter-veil{position:fixed;inset:0;z-index:55;opacity:0;pointer-events:none;transition:opacity .5s ease;background:rgba(244,240,232,.92)}
 [data-theme=dark] .enter-veil{background:rgba(9,13,21,.92)}
 body.is-entering .enter-veil{opacity:1}
-/* 入場前/演出中は固定タブを隠す（カバーの選択ボタンと重複させない） */
-body:not(.is-entered) .tabs{display:none}
-/* 入場後はヒーローを1行コンパクトに＝ロゴ左＋「辺境TRPG村」右のロックアップ（全画面カバーを残さない） */
-body.is-entered .hero{min-height:auto;flex-direction:row;gap:14px;padding:16px 20px 14px;justify-content:center;align-items:center}
-body.is-entered .hero .hero-logo{width:56px;margin:0;filter:drop-shadow(0 3px 10px rgba(0,0,0,.4))}
-body.is-entered .hero .hero-title{font-size:1.7em;margin:0;line-height:1.05}
+/* 旧・本文内タブバーは廃止（切替は右上のモードボタンで） */
+.tabs{display:none}
+/* 右上のモード切替ボタン（ライト/BGMと同じ列・今見ていない方だけ表示） */
+.mode-btn{background:var(--card);color:var(--tx);border:1px solid var(--cln);border-radius:22px;padding:7px 15px;font-size:.85em;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.mode-btn[hidden]{display:none}
+/* 入場後＝「ロゴ＋辺境TRPG村」を左上に固定（本文と被らせない・全画面カバーを残さない） */
+body.is-entered .hero{position:fixed;top:0;left:0;z-index:30;min-height:0;width:auto;flex-direction:row;gap:10px;padding:9px 20px 9px 14px;justify-content:flex-start;align-items:center;background:linear-gradient(90deg,rgba(10,15,26,.62),rgba(10,15,26,0));pointer-events:none}
+body.is-entered .hero .hero-logo{width:40px;margin:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+body.is-entered .hero .hero-title{font-size:1.2em;margin:0;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 body.is-entered .hero .motes{display:none}
+body.is-entered .wrap{padding-top:62px}
 @media (prefers-reduced-motion:reduce){
  body.is-entering #sceneBg{transform:none;filter:none}
  body.is-entering .hero .hero-logo,body.is-entering .hero .hero-title,body.is-entering .hero .sub,body.is-entering .hero .enter-lead,body.is-entering .hero .enter-choice{filter:none;transform:none}
@@ -428,7 +436,7 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
 <div class="progress"><i></i></div><div class="cine"></div><div class="grain"></div><div class="enter-veil"></div>
 <div class="illbg" id="sceneBg"></div>
 <div class="fog"><span></span><span></span><span></span></div>
-<div class="controls"><button class="theme-btn" onclick="toggleTheme()">ダークモード</button><button class="bgm-btn" id="bgmBtn" aria-label="BGMの再生/停止">BGM：オフ</button><input type="range" id="bgmVol" class="bgm-vol" min="0" max="100" value="35" aria-label="音量" title="音量"><audio id="bgm" loop preload="none" src="bgm.mp3"></audio></div>
+<div class="controls"><button class="mode-btn" id="modeBtn" hidden></button><button class="theme-btn" onclick="toggleTheme()">ダークモード</button><button class="bgm-btn" id="bgmBtn" aria-label="BGMの再生/停止">BGM：オフ</button><input type="range" id="bgmVol" class="bgm-vol" min="0" max="100" value="35" aria-label="音量" title="音量"><audio id="bgm" loop preload="none" src="bgm.mp3"></audio></div>
 <nav class="toc"><div class="toc-h">目次</div><ul></ul></nav>
 
 <div class="hero" data-entered="none">
@@ -436,10 +444,10 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
  <img class="hero-logo" src="img/logo_mark.png" alt="辺境TRPG村のロゴ＝開いた本から立ちのぼる夕暮れの村とサイコロ" width="210" height="210">
  <h1 class="hero-title">辺境TRPG村</h1>
  <div class="sub">ルールとマナーを守って、皆で楽しく。</div>
- <div class="enter-lead">辺境TRPG村って、どんなところ？</div>
+ <div class="enter-lead"><span>辺境TRPG村って、どんなところ？</span></div>
  <div class="enter-choice">
-  <button class="enter-btn" data-go="plain">ふつうに紹介</button>
-  <button class="enter-btn" data-go="story">物語で紹介</button>
+  <button class="enter-btn" data-go="plain"><span class="eb-main">ふつうに紹介</span><span class="eb-sub">事実をまっすぐ</span></button>
+  <button class="enter-btn" data-go="story"><span class="eb-main">物語で紹介</span><span class="eb-sub">物語として読む</span></button>
  </div>
 </div>
 
@@ -1068,7 +1076,8 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   var vh=window.innerHeight||700, st=window.scrollY||window.pageYOffset||0;
   // シーン0(夜景)＝最初の1画面でフェード（総ページ長に依存させない＝本文に夜景が居残らない）
   if(heroLayer){
-   var heroFade=stat?1:Math.max(0,Math.min(1,1-st/(vh*0.6)));   // 最初の1画面弱で素早く消す＝痕跡を残さない
+   var entered=document.body.classList.contains("is-entered");
+   var heroFade=entered?0:(stat?1:Math.max(0,Math.min(1,1-st/(vh*0.6))));  // 入場後は夜景(ゲート用)を消す＝本文は旅シーンの淡い背景に
    heroLayer.style.setProperty("--op",(heroFade*HERO_MAX).toFixed(3));
    heroLayer.style.setProperty("--ty","0px");
    heroLayer.style.removeProperty("--mask");
@@ -1122,6 +1131,8 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
  }
  function lockCover(on){document.documentElement.classList.toggle("cover-locked",on);document.body.classList.toggle("cover-locked",on)}
  function setHeading(name){var hero=document.querySelector(".hero"); if(hero)hero.setAttribute("data-entered",name)}  // 見出しは常に「辺境TRPG村」のまま（モード別タグラインは廃止）
+ // 右上の切替ボタンは「今見ていない方」だけを出す（ふつう閲覧中→物語で紹介／物語閲覧中→ふつうに紹介）
+ function updateModeBtn(name){var mb=document.getElementById("modeBtn");if(!mb)return;var other=name==="story"?"plain":"story";mb.textContent=other==="story"?"物語で紹介":"ふつうに紹介";mb.setAttribute("data-go",other);mb.hidden=false}
  // 初回入場＝既存のテキスト＋背景を霧散させつつブラー強め＋ズームイン→明けてスクロールサイトへ（初回のみ）
  function introEnter(name){
   var b=document.body; if(b.classList.contains("is-entering")||b.classList.contains("is-entered"))return;
@@ -1132,13 +1143,14 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   setTimeout(function(){            // ズームが明ける瞬間
    setHeading(name);
    b.classList.remove("is-entering"); b.classList.add("is-entered");
+   updateModeBtn(name);
    lockCover(false); window.scrollTo(0,0); recalc(); paintScenes(0);
   }, reduce?150:780);
  }
- // 入場後のモード切替（演出なし＝固定タブから）
- function switchMode(name){applyPanel(name); setHeading(name)}
+ // 入場後のモード切替（演出なし・右上ボタンから／本文先頭へ戻す）
+ function switchMode(name){applyPanel(name); setHeading(name); updateModeBtn(name); window.scrollTo(0,0); recalc(); paintScenes(0)}
  document.querySelectorAll(".enter-btn").forEach(function(b){b.addEventListener("click",function(){introEnter(b.dataset.go)})});
- document.querySelectorAll(".tab-btn").forEach(function(b){b.addEventListener("click",function(){switchMode(b.dataset.tab)})});
+ var mb=document.getElementById("modeBtn"); if(mb)mb.addEventListener("click",function(){switchMode(mb.getAttribute("data-go"))});
  var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}applyPanel(t);  // 初期＝カバー（本文は裏で用意・固定タブは入場まで非表示）
  lockCover(true);    // タイトル画面はスクロールロック（ふつう/物語を選ぶまで）
  // BGM（初期は停止・クリックで再生/停止）
