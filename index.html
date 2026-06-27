@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:title" content="辺境TRPG村って、こんなところ"><meta property="og:description" content="TRPGのオンラインセッションを楽しむDiscordサーバー。ルールとマナーを守って、皆で楽しく。"><meta property="og:type" content="website"><meta property="og:image" content="https://namezu.github.io/henkyo-trpg-village/ogp.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="robots" content="noindex,nofollow"><title>辺境TRPG村って、こんなところ</title><style>/* ============================================================
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:title" content="辺境TRPG村って、こんなところ"><meta property="og:description" content="TRPGのオンラインセッションを楽しむDiscordサーバー。ルールとマナーを守って、皆で楽しく。"><meta property="og:type" content="website"><meta property="og:image" content="https://namezu.github.io/henkyo-trpg-village/ogp.jpg"><meta name="twitter:card" content="summary_large_image"><title>辺境TRPG村って、こんなところ</title><style>/* ============================================================
    辺境TRPG村 ── Design Kit (village.css)
    このファイルが「見た目」の正本（single source of truth）。
    build_preview.py がこれを読み込んで生成HTMLに埋め込む。
@@ -286,6 +286,7 @@ body.is-entering .enter-veil{opacity:1}
 /* 入場後＝「ロゴ＋辺境TRPG村」を左上に固定（本文と被らせない・全画面カバーを残さない） */
 body.is-entered .hero{position:fixed;top:0;left:0;z-index:30;min-height:0;width:auto;flex-direction:row;gap:10px;padding:9px 20px 9px 14px;justify-content:flex-start;align-items:center;background:linear-gradient(90deg,rgba(10,15,26,.62),rgba(10,15,26,0));cursor:pointer;transition:filter .2s,transform .2s}
 body.is-entered .hero:hover{filter:brightness(1.12)}
+body.is-entered .hero:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:3px;border-radius:6px}
 body.is-entered .hero .hero-logo{width:40px;margin:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
 body.is-entered .hero .hero-title{font-size:1.2em;margin:0;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 body.is-entered .hero .motes{display:none}
@@ -431,7 +432,7 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
 .controls{position:fixed;top:12px;right:12px;z-index:99;display:flex;gap:8px;align-items:center}
 .controls .theme-btn,.controls .bgm-btn{position:static;top:auto;right:auto;bottom:auto;left:auto}
 /* スマホ：コントロールは上に置く（旧タブ廃止で上が空いた）＝カバーのヒント文と被らせない。音量つまみは省スペースで隠す */
-@media(max-width:560px){.controls{top:8px;right:8px;bottom:auto;gap:6px}.controls .theme-btn,.controls .bgm-btn,.mode-btn{padding:6px 10px;font-size:.78em}.bgm-vol{display:none}}
+@media(max-width:560px){.controls{top:calc(8px + env(safe-area-inset-top));right:calc(8px + env(safe-area-inset-right));bottom:auto;gap:6px}.controls .theme-btn,.controls .bgm-btn,.mode-btn{padding:6px 10px;font-size:.78em}.bgm-vol{display:none}}
 
 @media (prefers-reduced-motion:reduce){.illbg-l{-webkit-mask-image:none!important;mask-image:none!important}.illbg-l.s0{animation:none!important;transform:none!important}}
 
@@ -1057,16 +1058,18 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
 (function(){
  // テーマ
  function applyT(t){var d=document.documentElement;if(t==="dark"){d.setAttribute("data-theme","dark")}else{d.removeAttribute("data-theme")}var b=document.querySelector(".theme-btn");if(b){b.textContent=t==="dark"?"ライトモード":"ダークモード"}try{localStorage.setItem("th",t)}catch(e){}if(window.__heroScene)window.__heroScene();}
+ var themeAnim=false;
  window.toggleTheme=function(){
+  if(themeAnim)return;                          // 連打ガード（遷移中は無視）
   var cur=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
   var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var v=document.querySelector(".theme-veil");
   if(reduce||!v){applyT(cur);return}
-  v.classList.add("on");                       // 暗転→切替→明転の小さなシーンチェンジ
+  themeAnim=true; v.classList.add("on");        // 暗転→切替→明転の小さなシーンチェンジ
   setTimeout(function(){applyT(cur)},190);
-  setTimeout(function(){v.classList.remove("on")},240);
+  setTimeout(function(){v.classList.remove("on");themeAnim=false},240);
  };
- var saved="dark";try{saved=localStorage.getItem("th")||"dark"}catch(e){}applyT(saved);
+ var saved="dark";try{saved=localStorage.getItem("th")||"dark"}catch(e){}saved=saved==="light"?"light":"dark";applyT(saved);
  // 出現アニメ
  function revealIn(root){(root||document).querySelectorAll(".reveal").forEach(function(el){el.classList.add("on")})}
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}})},{threshold:.10});
@@ -1125,6 +1128,8 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
  function tick(){var st=window.scrollY||window.pageYOffset||0;if(st!==lastY){lastY=st;var r=maxH>0?st/maxH:0;bd.style.setProperty("--sy",st);bd.style.setProperty("--sp",r.toFixed(4));if(pbar){pbar.style.width=(r*100).toFixed(2)+"%"}paintScenes(r)}requestAnimationFrame(tick)}
  recalc(); requestAnimationFrame(tick);
  window.addEventListener("resize",recalc,{passive:true});
+ window.addEventListener("orientationchange",recalc);
+ if(window.visualViewport)window.visualViewport.addEventListener("resize",recalc);  // モバイルのアドレスバー伸縮で余白がズレないよう再計算
  // ヒーローの光の粒
  var mt=document.querySelector(".hero .motes");
  if(mt){for(var i=0;i<16;i++){var bb=document.createElement("b"),s=4+Math.random()*6;bb.style.left=(Math.random()*100)+"%";bb.style.width=bb.style.height=s+"px";bb.style.animationDuration=(6+Math.random()*8)+"s";bb.style.animationDelay=(-Math.random()*10)+"s";mt.appendChild(bb)}}
@@ -1156,7 +1161,9 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   setJourney(name==="story"?SCENES_STORY:SCENES_PLAIN);   // 物語=9枚 / ふつう=5枚（長さで再計算）
   try{localStorage.setItem("tab",name)}catch(e){}
  }
- function lockCover(on){document.documentElement.classList.toggle("cover-locked",on);document.body.classList.toggle("cover-locked",on)}
+ function lockCover(on){document.documentElement.classList.toggle("cover-locked",on);document.body.classList.toggle("cover-locked",on);var w=document.querySelector(".wrap");if(w){if(on)w.setAttribute("inert","");else w.removeAttribute("inert")}}
+ // 左上ブランドを「戻るボタン」としてマーク（キーボード/支援技術対応）
+ function markBrand(on){var h=document.querySelector(".hero");if(!h)return;if(on){h.setAttribute("title","クリックでタイトルに戻る");h.setAttribute("role","button");h.setAttribute("tabindex","0");h.setAttribute("aria-label","タイトル画面に戻る")}else{h.removeAttribute("title");h.removeAttribute("role");h.removeAttribute("tabindex");h.removeAttribute("aria-label")}}
  function setHeading(name){var hero=document.querySelector(".hero"); if(hero)hero.setAttribute("data-entered",name)}  // 見出しは常に「辺境TRPG村」のまま（モード別タグラインは廃止）
  // 右上の切替ボタンは「今見ていない方」だけを出す（ふつう閲覧中→物語で紹介／物語閲覧中→ふつうに紹介）
  function updateModeBtn(name){var mb=document.getElementById("modeBtn");if(!mb)return;var other=name==="story"?"plain":"story";mb.textContent=other==="story"?"物語で紹介":"ふつうに紹介";mb.setAttribute("data-go",other);mb.hidden=false}
@@ -1170,29 +1177,35 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   setTimeout(function(){            // ズームが明ける瞬間
    setHeading(name);
    b.classList.remove("is-entering"); b.classList.add("is-entered");
-   updateModeBtn(name);
-   var h=document.querySelector(".hero"); if(h)h.setAttribute("title","クリックでタイトルに戻る");
+   updateModeBtn(name); markBrand(true);
    lockCover(false); window.scrollTo(0,0); recalc(); paintScenes(0);
+   var mb2=document.getElementById("modeBtn"); if(mb2)try{mb2.focus({preventScroll:true})}catch(e){}
   }, reduce?150:780);
  }
  // 入場後のモード切替（演出なし・右上ボタンから／本文先頭へ戻す）
  function switchMode(name){applyPanel(name); setHeading(name); updateModeBtn(name); window.scrollTo(0,0); recalc(); paintScenes(0)}
  // 目次などから入場済み状態へ即移行（演出なし＝ロック解除して本文を読める状態に）
- function ensureEntered(name){var b=document.body; if(b.classList.contains("is-entered"))return; b.classList.remove("is-entering"); b.classList.add("is-entered"); applyPanel(name); setHeading(name); updateModeBtn(name); lockCover(false); var h=document.querySelector(".hero");if(h)h.setAttribute("title","クリックでタイトルに戻る"); recalc(); paintScenes(curSp)}
+ function ensureEntered(name){var b=document.body; if(b.classList.contains("is-entered"))return; b.classList.remove("is-entering"); b.classList.add("is-entered"); applyPanel(name); setHeading(name); updateModeBtn(name); lockCover(false); markBrand(true); recalc(); paintScenes(curSp)}
  // 左上ブランドをクリック→ゲート(タイトル画面)に戻る
  function backToGate(){
   var b=document.body; if(!b.classList.contains("is-entered"))return;
   window.scrollTo(0,0);
   b.classList.remove("is-entered","is-entering");
-  var hero=document.querySelector(".hero"); if(hero){hero.setAttribute("data-entered","none");hero.removeAttribute("title")}
+  var hero=document.querySelector(".hero"); if(hero)hero.setAttribute("data-entered","none");
+  markBrand(false);
   var mb=document.getElementById("modeBtn"); if(mb)mb.hidden=true;
   document.querySelectorAll(".enter-btn").forEach(function(x){x.disabled=false});
   lockCover(true); recalc(); paintScenes(0);
+  var fb=document.querySelector(".enter-btn"); if(fb)try{fb.focus({preventScroll:true})}catch(e){}
  }
  document.querySelectorAll(".enter-btn").forEach(function(b){b.addEventListener("click",function(){introEnter(b.dataset.go)})});
  var mb=document.getElementById("modeBtn"); if(mb)mb.addEventListener("click",function(){switchMode(mb.getAttribute("data-go"))});
- var heroEl=document.querySelector(".hero"); if(heroEl)heroEl.addEventListener("click",function(){if(document.body.classList.contains("is-entered")&&!document.body.classList.contains("is-entering"))backToGate()});
- var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}applyPanel(t);  // 初期＝カバー（本文は裏で用意・固定タブは入場まで非表示）
+ var heroEl=document.querySelector(".hero");
+ if(heroEl){
+  heroEl.addEventListener("click",function(){if(document.body.classList.contains("is-entered")&&!document.body.classList.contains("is-entering"))backToGate()});
+  heroEl.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" "||e.key==="Spacebar")&&document.body.classList.contains("is-entered")&&!document.body.classList.contains("is-entering")){e.preventDefault();backToGate()}});
+ }
+ var t="plain";try{t=localStorage.getItem("tab")||"plain"}catch(e){}t=t==="story"?"story":"plain";applyPanel(t);  // 初期＝カバー（本文は裏で用意・固定タブは入場まで非表示）
  lockCover(true);    // タイトル画面はスクロールロック（ふつう/物語を選ぶまで）
  // BGM（初期は停止・クリックで再生/停止）
  var ab=document.getElementById("bgm"), bb=document.getElementById("bgmBtn"), vol=document.getElementById("bgmVol");
