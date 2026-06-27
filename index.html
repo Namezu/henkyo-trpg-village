@@ -1130,6 +1130,10 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
  window.addEventListener("resize",recalc,{passive:true});
  window.addEventListener("orientationchange",recalc);
  if(window.visualViewport)window.visualViewport.addEventListener("resize",recalc);  // モバイルのアドレスバー伸縮で余白がズレないよう再計算
+ window.addEventListener("load",recalc);                                            // 全リソース読込後に確定再計算
+ // 物語版は挿絵が遅延読込でページ高さが伸びる→高さ変化を監視して毎回maxHを更新（末尾で背景が止まる不具合の根治）
+ if(window.ResizeObserver){try{new ResizeObserver(function(){recalc()}).observe(document.body)}catch(e){}}
+ document.querySelectorAll("img").forEach(function(im){im.addEventListener("load",recalc)});
  // ヒーローの光の粒
  var mt=document.querySelector(".hero .motes");
  if(mt){for(var i=0;i<16;i++){var bb=document.createElement("b"),s=4+Math.random()*6;bb.style.left=(Math.random()*100)+"%";bb.style.width=bb.style.height=s+"px";bb.style.animationDuration=(6+Math.random()*8)+"s";bb.style.animationDelay=(-Math.random()*10)+"s";mt.appendChild(bb)}}
