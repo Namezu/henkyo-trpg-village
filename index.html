@@ -240,8 +240,10 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 .hero .motes{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .hero .motes b{position:absolute;bottom:-12px;border-radius:50%;background:rgba(255,255,255,.7);filter:blur(1px);animation:floatUp linear infinite}
 @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0}12%{opacity:.85}100%{transform:translateY(-88vh) scale(.4);opacity:0}}
-.hero h1,.hero .sub,.hero .chips,.hero .cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) both}
-.hero .sub{animation-delay:.12s}.hero .chips{animation-delay:.24s}.hero .cta{animation-delay:.36s}
+.hero .hero-logo{display:block;width:min(210px,44vw);height:auto;margin:0 auto .15em;filter:drop-shadow(0 6px 18px rgba(0,0,0,.38))}
+.hero .hero-logo,.hero h1,.hero .sub,.hero .chips,.hero .cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.10s}.hero .sub{animation-delay:.2s}.hero .chips{animation-delay:.3s}.hero .cta{animation-delay:.4s}
+@media(max-width:560px){.hero .hero-logo{width:40vw}}
 @keyframes heroRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 .hero .cue{position:absolute;bottom:16px;left:50%;color:#fff;opacity:.85;font-size:1.3em;text-decoration:none;text-shadow:0 1px 6px rgba(0,0,0,.3);animation:bob 1.8s ease-in-out infinite;z-index:2}
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
@@ -262,7 +264,7 @@ h2,h3,.tab-btn,.cta,.chip,.toc{font-family:'Zen Kaku Gothic New',sans-serif}
 @media(max-width:560px){.hero{min-height:72vh}}
 @media (prefers-reduced-motion:reduce){
   .hero .motes,.hero .cue{display:none}
-  .hero h1,.hero .sub,.hero .chips,.hero .cta,.panel.active{animation:none}
+  .hero .hero-logo,.hero h1,.hero .sub,.hero .chips,.hero .cta,.panel.active{animation:none}
   .panel-story .ill.reveal img{transform:none}
 }
 
@@ -392,6 +394,7 @@ h2.reveal:not(.on){transform:translateX(-26px)}
 
 <div class="hero">
  <div class="motes"></div>
+ <img class="hero-logo" src="img/logo_mark.png" alt="辺境TRPG村のロゴ＝開いた本から立ちのぼる夕暮れの村とサイコロ" width="210" height="210">
  <h1>辺境TRPG村</h1>
  <div class="sub">ルールとマナーを守って、皆で楽しく。</div>
 </div>
