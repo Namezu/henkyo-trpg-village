@@ -1105,14 +1105,18 @@ html.cover-locked,body.cover-locked{overflow:hidden!important;height:100%;oversc
   }
   var jN=journeyLayers.length; if(!jN)return;
   if(stat){for(var s=0;s<jN;s++){journeyLayers[s].style.setProperty("--op",s===0?mx:0);journeyLayers[s].style.setProperty("--ty","0px");journeyLayers[s].style.removeProperty("--mask")}return}
-  // 旅シーン群＝各シーンをしっかり"保持"し、区間の終わりだけで素早くクロスフェード＝前のシーンの痕跡を残さない明快なシーンチェンジ
+  // 旅シーン群＝各シーンがスクロールと一緒に上下にパララックス移動し、見切れる前(区間末)に素早くクロスフェードして次へ。動かすのは現在＋次の2枚だけ・前は即0で痕跡なし
   var p=Math.max(0,Math.min(1,sp))*(jN-1), cur=Math.floor(p), f=p-cur, nxt=Math.min(cur+1,jN-1);
-  var FADE=0.24;                            // 区間末のこの幅だけで切替（手前は1枚だけを保持＝重ならない）
-  var tn=f<=(1-FADE)?0:(f-(1-FADE))/FADE;   // 0→1：次シーンへの遷移量
-  tn=tn*tn*(3-2*tn);                        // smoothstep＝境目だけキレよく(ease-in-out)・残留を最小化
-  for(var i=0;i<jN;i++){var L=journeyLayers[i];L.style.setProperty("--op","0");L.style.setProperty("--ty","0px");L.style.removeProperty("--mask")}
-  journeyLayers[cur].style.setProperty("--op",((1-tn)*mx).toFixed(3));
-  if(nxt!==cur)journeyLayers[nxt].style.setProperty("--op",(tn*mx).toFixed(3));
+  var FADE=0.74;                              // この点(区間内74%)から末尾26%だけでクロスフェード
+  var ft=f<=FADE?0:(f-FADE)/(1-FADE); ft=ft*ft*(3-2*ft);   // smoothstep
+  var A=vh*0.16;                              // パララックス移動量(背景150%ズームの余白0.25vhより小さく＝端を出さない)
+  for(var i=0;i<jN;i++){var L=journeyLayers[i],op=0,ty=0;
+   if(i===cur){op=1-ft; ty=A-2*A*f;}            // 現在：区間内でA→-Aへ縦移動(スクロール同方向)＋末で次へフェード
+   else if(i===nxt&&nxt!==cur){op=ft; ty=A;}    // 次：開始位置A(=次区間の先頭ty)で入る＝境界で連続しカクつかない
+   L.style.setProperty("--op",(op*mx).toFixed(3));
+   L.style.setProperty("--ty",ty.toFixed(1)+"px");
+   L.style.removeProperty("--mask");
+  }
  }
  var maxH=0, lastY=-1;
  function recalc(){maxH=document.documentElement.scrollHeight-window.innerHeight;lastY=-1;}
